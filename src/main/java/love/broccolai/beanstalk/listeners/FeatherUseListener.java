@@ -62,7 +62,7 @@ public class FeatherUseListener implements Listener {
 
         item.setAmount(item.getAmount() - 1);
 
-        this.messageService.redeemed(player, newRemaining);
+        this.messageService.redeemed(player, flightsDuration, newRemaining);
     }
 
 }

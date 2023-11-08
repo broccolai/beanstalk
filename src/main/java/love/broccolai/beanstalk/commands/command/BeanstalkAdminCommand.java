@@ -3,6 +3,8 @@ package love.broccolai.beanstalk.commands.command;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.DurationArgument;
+import cloud.commandframework.arguments.standard.EnumArgument;
+import cloud.commandframework.bukkit.parsers.PlayerArgument;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import java.time.Duration;
@@ -10,6 +12,7 @@ import love.broccolai.beanstalk.commands.cloud.CloudArgumentFactory;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.item.ItemService;
 import love.broccolai.beanstalk.service.message.MessageService;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,11 +35,12 @@ public final class BeanstalkAdminCommand implements PluginCommand {
 
     @Override
     public void register(final CommandManager<CommandSender> commandManager) {
-        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("beanstalk");
+        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("beanstalk")
+            .permission("beanstalk.admin");
 
         commandManager.command(baseCommand
-            .senderType(Player.class)
             .literal("generate")
+            .argument(PlayerArgument.of("target"))
             .argument(DurationArgument.of("duration"))
             .handler(this::handleGenerate)
         );
@@ -46,13 +50,22 @@ public final class BeanstalkAdminCommand implements PluginCommand {
             .argument(this.argumentFactory.profile("target", true))
             .handler(this::handleStatus)
         );
+
+        commandManager.command(baseCommand
+            .literal("modify")
+            .argument(EnumArgument.of(ModifyAction.class, "action"))
+            .argument(this.argumentFactory.profile("target", true))
+            .argument(DurationArgument.of("duration"))
+            .handler(this::handleModify)
+        );
     }
 
     private void handleGenerate(final CommandContext<CommandSender> context) {
         Player sender = (Player) context.getSender();
+        Player target = context.get("target");
         Duration duration = context.get("duration");
 
-        sender.getInventory().addItem(
+        target.getInventory().addItem(
             this.itemService.create(duration)
         );
 
@@ -65,4 +78,45 @@ public final class BeanstalkAdminCommand implements PluginCommand {
 
         this.messageService.statusTarget(sender, target, target.flightRemaining());
     }
+
+    private void handleModify(final CommandContext<CommandSender> context) {
+        Player sender = (Player) context.getSender();
+        Profile target = context.get("target");
+        ModifyAction modifyAction = context.get("action");
+        Duration duration = context.get("duration");
+
+        target.flightRemaining(flight -> {
+            return switch (modifyAction) {
+                case GIVE -> flight.plus(duration);
+                case REMOVE -> flight.minus(duration);
+            };
+        });
+
+        //todo: move this to ActionService
+        this.stopFlyingIfDurationZero(target);
+
+        this.messageService.modifyTarget(sender, target, target.flightRemaining());
+    }
+
+    private void stopFlyingIfDurationZero(Profile profile) {
+        if (!profile.flightRemaining().isZero()) {
+            return;
+        }
+
+        profile.flying(false);
+
+        Player player = Bukkit.getPlayer(profile.uuid());
+
+        if (player == null) {
+            return;
+        }
+
+        player.setAllowFlight(false);
+    }
+
+    private enum ModifyAction {
+        GIVE,
+        REMOVE
+    }
+
 }

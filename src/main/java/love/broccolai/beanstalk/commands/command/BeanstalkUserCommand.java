@@ -32,7 +32,8 @@ public final class BeanstalkUserCommand implements PluginCommand {
 
     @Override
     public void register(final CommandManager<CommandSender> commandManager) {
-        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("flight");
+        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("flight")
+            .permission("beanstalk.user");
 
         commandManager.command(baseCommand
             .senderType(Player.class)

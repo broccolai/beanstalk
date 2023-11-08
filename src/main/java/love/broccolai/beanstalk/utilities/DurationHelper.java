@@ -24,7 +24,7 @@ public final class DurationHelper {
             parts.add(minutes + "m");
         }
 
-        if (hours == 0 && seconds > 0) {
+        if (hours == 0 && seconds > 0 || duration.isZero()) {
             parts.add(seconds + "s");
         }
 

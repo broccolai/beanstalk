@@ -11,6 +11,8 @@ public final class Profile {
 
     private final UUID uuid;
     private Duration flightRemaining;
+
+    // not persisted through restarts
     private boolean flying;
 
     public Profile(final UUID uuid, final Duration flightRemaining, final boolean flying) {
@@ -32,7 +34,8 @@ public final class Profile {
     }
 
     public Duration flightRemaining(final UnaryOperator<Duration> editor) {
-        this.flightRemaining = editor.apply(this.flightRemaining);
+        Duration modifiedDuration = editor.apply(this.flightRemaining);
+        this.flightRemaining = modifiedDuration.isNegative() ? Duration.ZERO : modifiedDuration;
         return this.flightRemaining;
     }
 

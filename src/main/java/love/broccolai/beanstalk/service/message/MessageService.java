@@ -13,7 +13,7 @@ public interface MessageService {
     void status(@Receiver Audience receiver, @Placeholder Duration duration);
 
     @Message("feedback.redeemed")
-    void redeemed(@Receiver Audience receiver, @Placeholder Duration duration);
+    void redeemed(@Receiver Audience receiver, @Placeholder Duration redeemed, @Placeholder Duration duration);
 
     @Message("feedback.enable")
     void enable(@Receiver Audience receiver);
@@ -35,4 +35,10 @@ public interface MessageService {
 
     @Message("feedback.status-target")
     void statusTarget(@Receiver Audience receiver, @Placeholder Profile target, @Placeholder Duration duration);
+
+    @Message("feedback.modify-target")
+    void modifyTarget(@Receiver Audience receiver, @Placeholder Profile target, @Placeholder Duration duration);
+
+    @Message("warning.minute-remaining")
+    void minuteRemaining(@Receiver Audience receiver);
 }

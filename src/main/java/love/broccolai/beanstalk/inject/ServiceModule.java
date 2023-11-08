@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import io.leangen.geantyref.TypeToken;
 import java.time.Duration;
 import love.broccolai.beanstalk.config.LocaleConfiguration;
+import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.ActionService;
 import love.broccolai.beanstalk.service.action.EventActionService;
 import love.broccolai.beanstalk.service.data.DatabaseStorageService;
@@ -17,6 +18,8 @@ import love.broccolai.beanstalk.service.message.MessageRenderer;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.message.placeholder.DurationPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.placeholder.NumberPlaceholderResolver;
+import love.broccolai.beanstalk.service.message.placeholder.PlayerPlaceholderResolver;
+import love.broccolai.beanstalk.service.message.placeholder.ProfilePlaceholderResolver;
 import love.broccolai.beanstalk.service.message.placeholder.StringPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.receiver.BasicReceiverResolver;
 import love.broccolai.beanstalk.service.profile.PipelineProfileService;
@@ -28,6 +31,7 @@ import net.kyori.moonshine.Moonshine;
 import net.kyori.moonshine.exception.scan.UnscannableMethodException;
 import net.kyori.moonshine.strategy.StandardPlaceholderResolverStrategy;
 import net.kyori.moonshine.strategy.supertype.StandardSupertypeThenInterfaceSupertypeStrategy;
+import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -51,7 +55,9 @@ public class ServiceModule extends AbstractModule {
         final MessageRenderer messageRenderer,
         final StringPlaceholderResolver stringPlaceholderResolver,
         final NumberPlaceholderResolver numberPlaceholderResolver,
-        final DurationPlaceholderResolver durationPlaceholderResolver
+        final DurationPlaceholderResolver durationPlaceholderResolver,
+        final PlayerPlaceholderResolver playerPlaceholderResolver,
+        final ProfilePlaceholderResolver profilePlaceholderResolver
     ) throws UnscannableMethodException {
         return Moonshine.<MessageService, Audience>builder(TypeToken.get(MessageService.class))
             .receiverLocatorResolver(basicReceiverResolver, 0)
@@ -64,6 +70,8 @@ public class ServiceModule extends AbstractModule {
             .weightedPlaceholderResolver(String.class, stringPlaceholderResolver, 1)
             .weightedPlaceholderResolver(Number.class, numberPlaceholderResolver, 1)
             .weightedPlaceholderResolver(Duration.class, durationPlaceholderResolver, 1)
+            .weightedPlaceholderResolver(Player.class, playerPlaceholderResolver, 1)
+            .weightedPlaceholderResolver(Profile.class, profilePlaceholderResolver, 1)
             .create(this.getClass().getClassLoader());
     }
 

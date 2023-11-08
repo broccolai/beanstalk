@@ -11,6 +11,7 @@ import love.broccolai.beanstalk.inject.FactoryModule;
 import love.broccolai.beanstalk.inject.PluginModule;
 import love.broccolai.beanstalk.inject.ServiceModule;
 import love.broccolai.beanstalk.listeners.FeatherUseListener;
+import love.broccolai.beanstalk.listeners.PlayerLeaveListener;
 import love.broccolai.beanstalk.listeners.PreventFallListener;
 import love.broccolai.beanstalk.service.profile.provider.ProfileCacheProvider;
 import love.broccolai.beanstalk.tasks.FlightCheckTask;
@@ -32,7 +33,8 @@ public final class Beanstalk extends JavaPlugin {
 
     private static final Class<? extends Listener>[] LISTENERS = ArrayHelper.create(
         FeatherUseListener.class,
-        PreventFallListener.class
+        PreventFallListener.class,
+        PlayerLeaveListener.class
     );
 
     private @MonotonicNonNull Injector injector;

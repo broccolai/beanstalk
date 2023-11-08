@@ -20,9 +20,8 @@ public final class ProfileMapper implements RowMapper<Profile> {
 
         UUID uniqueId = uuidMapper.map(rs, "uuid", ctx);
         long flightRemaining = rs.getLong("flightRemaining");
-        boolean flying = rs.getBoolean("flying");
 
-        return new Profile(uniqueId, Duration.ofSeconds(flightRemaining), flying);
+        return new Profile(uniqueId, Duration.ofSeconds(flightRemaining), false);
     }
 
 }

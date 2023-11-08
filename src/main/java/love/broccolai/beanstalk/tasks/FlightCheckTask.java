@@ -19,6 +19,7 @@ public class FlightCheckTask {
 
     private static final int ONE_SECOND_OF_TICKS = 20;
     private static final Duration ONE_SECOND_DURATION = Duration.ofSeconds(1);
+    private static final Duration ONE_MINUTE_DURATION = Duration.ofSeconds(1);
 
     private final ProfileService profileService;
     private final MessageService messageService;
@@ -58,16 +59,24 @@ public class FlightCheckTask {
     }
 
     private void checkPlayer(final Profile profile) {
+        @Nullable Player player = Bukkit.getPlayer(profile.uuid());
+
+        if (player == null) {
+            return;
+        }
+
+        if (player.isFlying()) {
+            return;
+        }
+
         Duration newRemaining = profile.flightRemaining(current -> current.minus(ONE_SECOND_DURATION));
 
         if (!newRemaining.isZero()) {
             return;
         }
 
-        @Nullable Player player = Bukkit.getPlayer(profile.uuid());
-
-        if (player == null) {
-            return;
+        if (ONE_MINUTE_DURATION.equals(newRemaining)) {
+            this.messageService.minuteRemaining(player);
         }
 
         profile.flying(false);

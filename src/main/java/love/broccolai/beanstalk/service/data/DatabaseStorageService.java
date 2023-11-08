@@ -37,7 +37,6 @@ public final class DatabaseStorageService implements StorageService {
             handle.createUpdate(this.locator.query("save-profile"))
                 .bind("uuid", profile.uuid())
                 .bind("flightRemaining", profile.flightRemaining().toSeconds())
-                .bind("flying", profile.flying())
                 .execute();
         });
     }

@@ -1,12 +1,15 @@
 package love.broccolai.beanstalk.service.profile;
 
 import cloud.commandframework.services.ServicePipeline;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.profile.provider.PartialProfileProvider;
 import love.broccolai.beanstalk.service.profile.provider.ProfileCacheProvider;
@@ -20,8 +23,14 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @DefaultQualifier(NonNull.class)
 public class PipelineProfileService implements ProfileService {
 
+    private static final String UNKNOWN_PLAYER = "UNKNOWN";
+
     private final ServicePipeline pipeline = ServicePipeline.builder().build();
     private final ProfileCacheProvider cacheProvider;
+
+    private final Cache<UUID, String> profileNameCache = Caffeine.newBuilder()
+        .expireAfterAccess(5, TimeUnit.MINUTES)
+        .build();
 
     @Inject
     public PipelineProfileService(
@@ -68,8 +77,10 @@ public class PipelineProfileService implements ProfileService {
 
     @Override
     public String name(final Profile profile) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(profile.uuid());
-        return Objects.requireNonNull(player.getName());
+        return this.profileNameCache.get(profile.uuid(), uuid -> {
+            OfflinePlayer player = Bukkit.getOfflinePlayer(profile.uuid());
+            return Objects.requireNonNullElse(player.getName(), UNKNOWN_PLAYER);
+        });
     }
 
 }
