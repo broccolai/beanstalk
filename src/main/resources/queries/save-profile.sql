@@ -1,2 +1,2 @@
-REPLACE INTO template_users(uuid, data)
+REPLACE INTO beanstalk_users(uuid, data)
 VALUES(:uuid, :data);

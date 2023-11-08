@@ -5,10 +5,9 @@ plugins {
 
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("xyz.jpenilla.run-paper") version "2.2.0"
-    id("xyz.jpenilla.gremlin-gradle") version "0.0.2"
+    id("xyz.jpenilla.gremlin-gradle") version "0.0.3"
     id("net.ltgt.errorprone") version "3.1.0"
 }
-
 
 indra {
     javaVersions {
@@ -19,6 +18,7 @@ indra {
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.broccol.ai/releases/")
     sonatype.s01Snapshots()
 }
 
@@ -39,6 +39,8 @@ dependencies {
 
     runtimeDownloadApi("org.spongepowered", "configurate-hocon", "4.1.2")
     runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.1.0")
+
+    runtimeDownloadApi("broccolai.corn", "corn-minecraft-paper", "3.2.0")
 
     // database
     runtimeDownloadApi("com.zaxxer", "HikariCP", "5.0.1")
@@ -72,7 +74,7 @@ tasks {
             include(dependency("xyz.jpenilla:gremlin-runtime:0.0.2"))
         }
 
-        relocate("xyz.jpenilla.gremlin", "love.broccolai.template.lib.xyz.jpenilla.gremlin")
+        relocate("xyz.jpenilla.gremlin", "love.broccolai.beanstalk.lib.xyz.jpenilla.gremlin")
 
         archiveFileName.set(project.name + ".jar")
     }

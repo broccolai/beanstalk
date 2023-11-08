@@ -1,3 +1,3 @@
 SELECT uuid, data
-FROM template_users
+FROM beanstalk_users
 WHERE uuid = :uuid;

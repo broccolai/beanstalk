@@ -1,6 +1,6 @@
-name: plugin-template
+name: beanstalk
 version: $version
-main: love.broccolai.template.TemplatePlugin
-loader: love.broccolai.template.lib.xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader
+main: love.broccolai.beanstalk.Beanstalk
+loader: love.broccolai.beanstalk.lib.xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader
 author: broccolai
 api-version: "1.20"
