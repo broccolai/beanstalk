@@ -71,7 +71,7 @@ tasks {
 
     shadowJar {
         dependencies {
-            include(dependency("xyz.jpenilla:gremlin-runtime:0.0.2"))
+            include(dependency("xyz.jpenilla:gremlin-runtime:0.0.3"))
         }
 
         relocate("xyz.jpenilla.gremlin", "love.broccolai.beanstalk.lib.xyz.jpenilla.gremlin")
@@ -87,6 +87,7 @@ tasks {
         repos.set(listOf(
             "https://repo.papermc.io/repository/maven-public/",
             "https://repo.maven.apache.org/maven2/",
+            "https://repo.broccol.ai/releases/"
         ))
     }
 }

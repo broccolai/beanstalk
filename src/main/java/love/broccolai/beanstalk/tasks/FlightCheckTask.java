@@ -23,7 +23,7 @@ public class FlightCheckTask {
     private final ProfileService profileService;
     private final MessageService messageService;
     private final Plugin plugin;
-    
+
     @Inject
     public FlightCheckTask(
         final ProfileService profileService,
