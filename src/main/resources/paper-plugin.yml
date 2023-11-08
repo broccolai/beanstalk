@@ -1,0 +1,6 @@
+name: plugin-template
+version: $version
+main: love.broccolai.template.TemplatePlugin
+loader: love.broccolai.template.lib.xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader
+author: broccolai
+api-version: "1.20"
