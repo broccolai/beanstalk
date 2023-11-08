@@ -27,12 +27,24 @@ public final class BeanstalkUserCommand implements PluginCommand {
 
     @Override
     public void register(final CommandManager<CommandSender> commandManager) {
-        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("template-test");
+        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("flight");
 
         commandManager.command(baseCommand
             .senderType(Player.class)
             .literal("status")
             .handler(this::handleStatus)
+        );
+
+        commandManager.command(baseCommand
+            .senderType(Player.class)
+            .literal("on")
+            .handler(this::handleEnable)
+        );
+
+        commandManager.command(baseCommand
+            .senderType(Player.class)
+            .literal("off")
+            .handler(this::handleDisable)
         );
     }
 
@@ -40,9 +52,44 @@ public final class BeanstalkUserCommand implements PluginCommand {
         Player sender = (Player) context.getSender();
         Profile profile = this.profileService.get(sender.getUniqueId());
 
-        Duration duration = Duration.ofSeconds(profile.flightRemaining());
+        Duration duration = profile.flightRemaining();
 
         this.messageService.status(sender, duration);
+    }
+
+    private void handleEnable(final CommandContext<CommandSender> context) {
+        Player sender = (Player) context.getSender();
+        Profile profile = this.profileService.get(sender.getUniqueId());
+
+        if (profile.flightRemaining().isZero()) {
+            this.messageService.noFlightRemaining(sender);
+            return;
+        }
+
+        if (profile.flying()) {
+            this.messageService.alreadyEnabled(sender);
+            return;
+        }
+
+        profile.flying(true);
+        sender.setFlying(true);
+
+        this.messageService.enable(sender);
+    }
+
+    private void handleDisable(final CommandContext<CommandSender> context) {
+        Player sender = (Player) context.getSender();
+        Profile profile = this.profileService.get(sender.getUniqueId());
+
+        if (!profile.flying()) {
+            this.messageService.alreadyDisabled(sender);
+            return;
+        }
+
+        profile.flying(false);
+        sender.setFlying(false);
+
+        this.messageService.disable(sender);
     }
 
 }

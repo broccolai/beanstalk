@@ -1,5 +1,6 @@
 package love.broccolai.beanstalk.service.profile.provider;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public final class ProfileCreateProvider implements PartialProfileProvider {
         Map<UUID, Profile> results = new HashMap<>();
 
         for (UUID request : requests) {
-            results.put(request, new Profile(request, 0, false));
+            results.put(request, new Profile(request, Duration.ZERO, false));
         }
 
         return results;

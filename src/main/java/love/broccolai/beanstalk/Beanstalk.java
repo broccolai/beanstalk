@@ -10,7 +10,10 @@ import love.broccolai.beanstalk.inject.ConfigurationModule;
 import love.broccolai.beanstalk.inject.FactoryModule;
 import love.broccolai.beanstalk.inject.PluginModule;
 import love.broccolai.beanstalk.inject.ServiceModule;
+import love.broccolai.beanstalk.listeners.FeatherUseListener;
 import love.broccolai.beanstalk.service.profile.provider.ProfileCacheProvider;
+import love.broccolai.beanstalk.tasks.FlightCheckTask;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -38,6 +41,13 @@ public final class Beanstalk extends JavaPlugin {
         );
 
         this.registerCommands(this.injector);
+
+        Bukkit.getPluginManager().registerEvents(
+            this.injector.getInstance(FeatherUseListener.class),
+            this
+        );
+
+        this.injector.getInstance(FlightCheckTask.class).register();
     }
 
     @Override

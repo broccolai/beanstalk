@@ -10,7 +10,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jdbi.v3.core.Jdbi;
 
 @DefaultQualifier(NonNull.class)
-public class DatabaseStorageService implements StorageService {
+public final class DatabaseStorageService implements StorageService {
 
     private final QueriesLocator locator = new QueriesLocator();
 
@@ -36,7 +36,7 @@ public class DatabaseStorageService implements StorageService {
         this.jdbi.useHandle(handle -> {
             handle.createUpdate(this.locator.query("save-profile"))
                 .bind("uuid", profile.uuid())
-                .bind("flightRemaining", profile.flightRemaining())
+                .bind("flightRemaining", profile.flightRemaining().toSeconds())
                 .bind("flying", profile.flying())
                 .execute();
         });

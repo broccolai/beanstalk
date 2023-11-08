@@ -2,6 +2,7 @@ package love.broccolai.beanstalk.data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.Profile;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -21,7 +22,7 @@ public final class ProfileMapper implements RowMapper<Profile> {
         long flightRemaining = rs.getLong("flightRemaining");
         boolean flying = rs.getBoolean("flying");
 
-        return new Profile(uniqueId, flightRemaining, flying);
+        return new Profile(uniqueId, Duration.ofSeconds(flightRemaining), flying);
     }
 
 }

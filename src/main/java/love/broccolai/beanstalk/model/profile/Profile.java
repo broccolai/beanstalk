@@ -1,6 +1,8 @@
 package love.broccolai.beanstalk.model.profile;
 
+import java.time.Duration;
 import java.util.UUID;
+import java.util.function.UnaryOperator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -8,10 +10,10 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class Profile {
 
     private final UUID uuid;
-    private long flightRemaining;
+    private Duration flightRemaining;
     private boolean flying;
 
-    public Profile(final UUID uuid, final long flightRemaining, final boolean flying) {
+    public Profile(final UUID uuid, final Duration flightRemaining, final boolean flying) {
         this.uuid = uuid;
         this.flightRemaining = flightRemaining;
         this.flying = flying;
@@ -21,12 +23,17 @@ public final class Profile {
         return this.uuid;
     }
 
-    public long flightRemaining() {
+    public Duration flightRemaining() {
         return this.flightRemaining;
     }
 
-    public void flightRemaining(final long flightRemaining) {
+    public void flightRemaining(final Duration flightRemaining) {
         this.flightRemaining = flightRemaining;
+    }
+
+    public Duration flightRemaining(final UnaryOperator<Duration> editor) {
+        this.flightRemaining = editor.apply(this.flightRemaining);
+        return this.flightRemaining;
     }
 
     public boolean flying() {

@@ -10,9 +10,11 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 @Singleton
@@ -35,6 +37,26 @@ public class NBTItemService implements ItemService {
             .loreList(Component.text(DurationHelper.formatDuration(duration)))
             .setData(this.durationKey, PersistentDataType.LONG, duration.getSeconds())
             .build();
+    }
+
+    @Override
+    public @Nullable Duration flightDurationOfItem(final ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta == null) {
+            return null;
+        }
+
+        @Nullable Long duration = meta.getPersistentDataContainer().get(
+            this.durationKey,
+            PersistentDataType.LONG
+        );
+
+        if (duration == null) {
+            return null;
+        }
+
+        return Duration.ofSeconds(duration);
     }
 
 }
