@@ -7,7 +7,8 @@ import org.bukkit.command.CommandSender;
 public interface PluginCommand {
 
     Class<? extends PluginCommand>[] COMMANDS = ArrayHelper.create(
-        BeanstalkUserCommand.class
+        BeanstalkUserCommand.class,
+        BeanstalkAdminCommand.class
     );
 
     void register(CommandManager<CommandSender> commandManager);

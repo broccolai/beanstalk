@@ -36,7 +36,8 @@ public class DatabaseStorageService implements StorageService {
         this.jdbi.useHandle(handle -> {
             handle.createUpdate(this.locator.query("save-profile"))
                 .bind("uuid", profile.uuid())
-                .bind("data", profile.data())
+                .bind("flightRemaining", profile.flightRemaining())
+                .bind("flying", profile.flying())
                 .execute();
         });
     }

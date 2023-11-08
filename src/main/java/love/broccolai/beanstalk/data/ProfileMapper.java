@@ -18,9 +18,10 @@ public final class ProfileMapper implements RowMapper<Profile> {
         ColumnMapper<UUID> uuidMapper = ctx.findColumnMapperFor(UUID.class).orElseThrow(IllegalStateException::new);
 
         UUID uniqueId = uuidMapper.map(rs, "uuid", ctx);
-        int data = rs.getInt("data");
+        long flightRemaining = rs.getLong("flightRemaining");
+        boolean flying = rs.getBoolean("flying");
 
-        return new Profile(uniqueId, data);
+        return new Profile(uniqueId, flightRemaining, flying);
     }
 
 }

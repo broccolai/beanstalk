@@ -3,11 +3,15 @@ package love.broccolai.beanstalk.inject;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import io.leangen.geantyref.TypeToken;
+import java.time.Duration;
 import love.broccolai.beanstalk.config.LocaleConfiguration;
 import love.broccolai.beanstalk.service.data.DatabaseStorageService;
 import love.broccolai.beanstalk.service.data.StorageService;
+import love.broccolai.beanstalk.service.item.ItemService;
+import love.broccolai.beanstalk.service.item.NBTItemService;
 import love.broccolai.beanstalk.service.message.MessageRenderer;
 import love.broccolai.beanstalk.service.message.MessageService;
+import love.broccolai.beanstalk.service.message.placeholder.DurationPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.placeholder.NumberPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.placeholder.StringPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.receiver.BasicReceiverResolver;
@@ -31,6 +35,7 @@ public class ServiceModule extends AbstractModule {
         this.bind(StorageService.class).to(DatabaseStorageService.class);
         this.bind(ProfileService.class).to(PipelineProfileService.class);
         this.bind(TaskService.class).to(PaperTaskService.class);
+        this.bind(ItemService.class).to(NBTItemService.class);
     }
 
     @Provides
@@ -39,7 +44,8 @@ public class ServiceModule extends AbstractModule {
         final BasicReceiverResolver basicReceiverResolver,
         final MessageRenderer messageRenderer,
         final StringPlaceholderResolver stringPlaceholderResolver,
-        final NumberPlaceholderResolver numberPlaceholderResolver
+        final NumberPlaceholderResolver numberPlaceholderResolver,
+        final DurationPlaceholderResolver durationPlaceholderResolver
     ) throws UnscannableMethodException {
         return Moonshine.<MessageService, Audience>builder(TypeToken.get(MessageService.class))
             .receiverLocatorResolver(basicReceiverResolver, 0)
@@ -51,6 +57,7 @@ public class ServiceModule extends AbstractModule {
             )
             .weightedPlaceholderResolver(String.class, stringPlaceholderResolver, 1)
             .weightedPlaceholderResolver(Number.class, numberPlaceholderResolver, 1)
+            .weightedPlaceholderResolver(Duration.class, durationPlaceholderResolver, 1)
             .create(this.getClass().getClassLoader());
     }
 

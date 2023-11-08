@@ -19,7 +19,7 @@ public final class ProfileCreateProvider implements PartialProfileProvider {
         Map<UUID, Profile> results = new HashMap<>();
 
         for (UUID request : requests) {
-            results.put(request, new Profile(request, -1));
+            results.put(request, new Profile(request, 0, false));
         }
 
         return results;

@@ -2,26 +2,27 @@ package love.broccolai.beanstalk.commands.command;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
-import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
-import love.broccolai.beanstalk.commands.cloud.CloudArgumentFactory;
+import java.time.Duration;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.message.MessageService;
+import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public final class BeanstalkUserCommand implements PluginCommand {
 
-    private final CloudArgumentFactory argumentFactory;
     private final MessageService messageService;
+    private final ProfileService profileService;
 
     @Inject
     public BeanstalkUserCommand(
-        final CloudArgumentFactory argumentFactory,
-        final MessageService messageService
+        final MessageService messageService,
+        final ProfileService service
     ) {
-        this.argumentFactory = argumentFactory;
         this.messageService = messageService;
+        this.profileService = service;
     }
 
     @Override
@@ -29,36 +30,19 @@ public final class BeanstalkUserCommand implements PluginCommand {
         Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("template-test");
 
         commandManager.command(baseCommand
-            .literal("store")
-            .argument(this.argumentFactory.profile("target", true))
-            .argument(IntegerArgument.of("data"))
-            .handler(this::handleStore)
-        );
-
-        commandManager.command(baseCommand
-            .literal("retrieve")
-            .argument(this.argumentFactory.profile("target", true))
-            .handler(this::handleRetrieve)
+            .senderType(Player.class)
+            .literal("status")
+            .handler(this::handleStatus)
         );
     }
 
-    private void handleStore(final CommandContext<CommandSender> context) {
-        CommandSender sender = context.getSender();
-        Profile target = context.get("target");
-        Integer data = context.get("data");
+    private void handleStatus(final CommandContext<CommandSender> context) {
+        Player sender = (Player) context.getSender();
+        Profile profile = this.profileService.get(sender.getUniqueId());
 
-        target.data(data);
+        Duration duration = Duration.ofSeconds(profile.flightRemaining());
 
-        this.messageService.store(sender, data);
-    }
-
-    private void handleRetrieve(final CommandContext<CommandSender> context) {
-        CommandSender sender = context.getSender();
-        Profile target = context.get("target");
-
-        int data = target.data();
-
-        this.messageService.retrieve(sender, data);
+        this.messageService.status(sender, duration);
     }
 
 }

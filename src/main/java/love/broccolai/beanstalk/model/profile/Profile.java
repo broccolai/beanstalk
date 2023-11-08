@@ -8,23 +8,33 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class Profile {
 
     private final UUID uuid;
-    private int data;
+    private long flightRemaining;
+    private boolean flying;
 
-    public Profile(final UUID uuid, final int data) {
+    public Profile(final UUID uuid, final long flightRemaining, final boolean flying) {
         this.uuid = uuid;
-        this.data = data;
+        this.flightRemaining = flightRemaining;
+        this.flying = flying;
     }
 
     public UUID uuid() {
         return this.uuid;
     }
 
-    public int data() {
-        return this.data;
+    public long flightRemaining() {
+        return this.flightRemaining;
     }
 
-    public void data(final int data) {
-        this.data = data;
+    public void flightRemaining(final long flightRemaining) {
+        this.flightRemaining = flightRemaining;
+    }
+
+    public boolean flying() {
+        return this.flying;
+    }
+
+    public void flying(final boolean flying) {
+        this.flying = flying;
     }
 
 }
