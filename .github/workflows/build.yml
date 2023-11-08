@@ -13,4 +13,4 @@ jobs:
     uses: "broccolai/actions/.github/workflows/shared-ci.yml@master"
     secrets: inherit
     with:
-      artifacts-path: 'build/libs/*-all.jar'
+      artifacts-path: 'build/libs/beanstalk.jar'
