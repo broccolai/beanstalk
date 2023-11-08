@@ -5,8 +5,12 @@ import com.google.inject.Provides;
 import io.leangen.geantyref.TypeToken;
 import java.time.Duration;
 import love.broccolai.beanstalk.config.LocaleConfiguration;
+import love.broccolai.beanstalk.service.action.ActionService;
+import love.broccolai.beanstalk.service.action.EventActionService;
 import love.broccolai.beanstalk.service.data.DatabaseStorageService;
 import love.broccolai.beanstalk.service.data.StorageService;
+import love.broccolai.beanstalk.service.event.EventService;
+import love.broccolai.beanstalk.service.event.SimpleEventService;
 import love.broccolai.beanstalk.service.item.ItemService;
 import love.broccolai.beanstalk.service.item.NBTItemService;
 import love.broccolai.beanstalk.service.message.MessageRenderer;
@@ -36,6 +40,8 @@ public class ServiceModule extends AbstractModule {
         this.bind(ProfileService.class).to(PipelineProfileService.class);
         this.bind(TaskService.class).to(PaperTaskService.class);
         this.bind(ItemService.class).to(NBTItemService.class);
+        this.bind(EventService.class).to(SimpleEventService.class);
+        this.bind(ActionService.class).to(EventActionService.class);
     }
 
     @Provides

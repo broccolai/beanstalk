@@ -12,6 +12,7 @@ public final class DurationHelper {
     public static String formatDuration(final Duration duration) {
         long hours = duration.toHours();
         long minutes = duration.minusHours(hours).toMinutes();
+        long seconds = duration.minusHours(hours).minusMinutes(minutes).getSeconds();
 
         List<String> parts = new ArrayList<>();
 
@@ -21,6 +22,10 @@ public final class DurationHelper {
 
         if (hours == 0 && minutes > 0) {
             parts.add(minutes + "m");
+        }
+
+        if (hours == 0 && seconds > 0) {
+            parts.add(seconds + "s");
         }
 
         return String.join("", parts);

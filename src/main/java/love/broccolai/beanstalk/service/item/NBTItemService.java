@@ -4,11 +4,18 @@ import broccolai.corn.paper.item.PaperItemBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
+import love.broccolai.beanstalk.config.MainConfiguration;
 import love.broccolai.beanstalk.utilities.DurationHelper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -21,10 +28,16 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @DefaultQualifier(NonNull.class)
 public class NBTItemService implements ItemService {
 
+    //todo: find a way to integrate this with moonshine!
+    private static final MiniMessage MINI = MiniMessage.miniMessage();
+
+    private final MainConfiguration.ItemConfiguration configuration;
     private final NamespacedKey durationKey;
 
     @Inject
-    public NBTItemService(final Plugin plugin) {
+    public NBTItemService(final Plugin plugin, final MainConfiguration mainConfiguration) {
+        this.configuration = mainConfiguration.item;
+
         this.durationKey = Objects.requireNonNull(
             NamespacedKey.fromString("duration", plugin)
         );
@@ -32,11 +45,33 @@ public class NBTItemService implements ItemService {
 
     @Override
     public ItemStack create(final Duration duration) {
-        return PaperItemBuilder.ofType(Material.FEATHER)
-            .name(Component.text("flight feather"))
-            .loreList(Component.text(DurationHelper.formatDuration(duration)))
-            .setData(this.durationKey, PersistentDataType.LONG, duration.getSeconds())
-            .build();
+        TagResolver placeholders = TagResolver.resolver(
+            "duration",
+            Tag.preProcessParsed(DurationHelper.formatDuration(duration))
+        );
+
+        Material material = Objects.requireNonNull(
+            Material.matchMaterial(this.configuration.material)
+        );
+
+        List<Component> lore = this.configuration.lore
+            .stream()
+            .map(line -> MINI.deserialize(line, placeholders))
+            .toList();
+
+        PaperItemBuilder itemBuilder = PaperItemBuilder.ofType(material)
+            .name(MINI.deserialize(this.configuration.name, placeholders))
+            .lore(lore)
+            .customModelData(this.configuration.customModelData)
+            .setData(this.durationKey, PersistentDataType.LONG, duration.getSeconds());
+
+        if (this.configuration.shouldGlow) {
+            itemBuilder = itemBuilder
+                .addEnchant(Enchantment.DURABILITY, 1)
+                .addFlag(ItemFlag.HIDE_ENCHANTS);
+        }
+
+        return itemBuilder.build();
     }
 
     @Override

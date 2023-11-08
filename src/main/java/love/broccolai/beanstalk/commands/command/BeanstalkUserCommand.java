@@ -6,6 +6,8 @@ import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import java.time.Duration;
 import love.broccolai.beanstalk.model.profile.Profile;
+import love.broccolai.beanstalk.service.action.ActionService;
+import love.broccolai.beanstalk.service.action.result.FlyResult;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.bukkit.command.CommandSender;
@@ -15,14 +17,17 @@ public final class BeanstalkUserCommand implements PluginCommand {
 
     private final MessageService messageService;
     private final ProfileService profileService;
+    private final ActionService actionService;
 
     @Inject
     public BeanstalkUserCommand(
         final MessageService messageService,
-        final ProfileService service
+        final ProfileService profileService,
+        final ActionService actionService
     ) {
         this.messageService = messageService;
-        this.profileService = service;
+        this.profileService = profileService;
+        this.actionService = actionService;
     }
 
     @Override
@@ -59,22 +64,14 @@ public final class BeanstalkUserCommand implements PluginCommand {
 
     private void handleEnable(final CommandContext<CommandSender> context) {
         Player sender = (Player) context.getSender();
-        Profile profile = this.profileService.get(sender.getUniqueId());
 
-        if (profile.flightRemaining().isZero()) {
-            this.messageService.noFlightRemaining(sender);
-            return;
+        FlyResult actionResult = this.actionService.fly(sender);
+
+        switch (actionResult) {
+            case NO_FLIGHT_REMAINING -> this.messageService.noFlightRemaining(sender);
+            case ALREADY_FLYING -> this.messageService.alreadyEnabled(sender);
+            case SUCCESS -> this.messageService.enable(sender);
         }
-
-        if (profile.flying()) {
-            this.messageService.alreadyEnabled(sender);
-            return;
-        }
-
-        profile.flying(true);
-        sender.setFlying(true);
-
-        this.messageService.enable(sender);
     }
 
     private void handleDisable(final CommandContext<CommandSender> context) {
@@ -87,7 +84,7 @@ public final class BeanstalkUserCommand implements PluginCommand {
         }
 
         profile.flying(false);
-        sender.setFlying(false);
+        sender.setAllowFlight(false);
 
         this.messageService.disable(sender);
     }

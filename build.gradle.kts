@@ -41,6 +41,7 @@ dependencies {
     runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.1.0")
 
     runtimeDownloadApi("broccolai.corn", "corn-minecraft-paper", "3.2.0")
+    runtimeDownloadApi("com.seiama", "event-api", "1.0.0-SNAPSHOT")
 
     // database
     runtimeDownloadApi("com.zaxxer", "HikariCP", "5.0.1")
@@ -86,8 +87,9 @@ tasks {
     writeDependencies {
         repos.set(listOf(
             "https://repo.papermc.io/repository/maven-public/",
+            "https://repo.broccol.ai/releases/",
             "https://repo.maven.apache.org/maven2/",
-            "https://repo.broccol.ai/releases/"
+            "https://s01.oss.sonatype.org/content/repositories/snapshots/"
         ))
     }
 }

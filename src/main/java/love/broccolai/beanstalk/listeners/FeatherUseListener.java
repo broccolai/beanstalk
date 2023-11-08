@@ -60,6 +60,8 @@ public class FeatherUseListener implements Listener {
         Duration newRemaining = profile.flightRemaining().plus(flightsDuration);
         profile.flightRemaining(newRemaining);
 
+        item.setAmount(item.getAmount() - 1);
+
         this.messageService.redeemed(player, newRemaining);
     }
 
