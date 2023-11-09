@@ -1,9 +1,9 @@
 package love.broccolai.beanstalk.service.action;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import java.time.Duration;
 import java.util.function.UnaryOperator;
-import com.google.inject.Singleton;
 import love.broccolai.beanstalk.event.FlightChangeEvent;
 import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;

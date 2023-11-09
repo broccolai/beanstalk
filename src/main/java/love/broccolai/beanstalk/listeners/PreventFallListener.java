@@ -1,10 +1,10 @@
 package love.broccolai.beanstalk.listeners;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import com.google.inject.Singleton;
 import love.broccolai.beanstalk.event.FlightChangeEvent;
 import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;

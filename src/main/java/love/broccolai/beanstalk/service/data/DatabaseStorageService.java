@@ -1,9 +1,9 @@
 package love.broccolai.beanstalk.service.data;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import java.util.Optional;
 import java.util.UUID;
-import com.google.inject.Singleton;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.utilities.QueriesLocator;
 import org.checkerframework.checker.nullness.qual.NonNull;
