@@ -1,8 +1,8 @@
 package love.broccolai.beanstalk.service.action.result;
 
-public enum FlyResult {
+public enum ModifyFlightResult {
     NO_PERMISSION_IN_WORLD,
     NO_FLIGHT_REMAINING,
-    ALREADY_FLYING,
+    ALREADY_IN_STATE,
     SUCCESS
 }

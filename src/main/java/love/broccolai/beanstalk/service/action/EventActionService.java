@@ -5,21 +5,21 @@ import java.time.Duration;
 import java.util.function.UnaryOperator;
 import com.google.inject.Singleton;
 import love.broccolai.beanstalk.event.FlightChangeEvent;
+import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
-import love.broccolai.beanstalk.service.action.result.FlyResult;
-import love.broccolai.beanstalk.service.action.result.ModifyFlyResult;
+import love.broccolai.beanstalk.service.action.result.ModifyFlightDurationResult;
+import love.broccolai.beanstalk.service.action.result.ModifyFlightResult;
 import love.broccolai.beanstalk.service.event.EventService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 @Singleton
 @DefaultQualifier(NonNull.class)
 public class EventActionService implements ActionService {
-
-    private static final String PERMISSION_PREFIX = "beanstalk.fly.";
 
     private final ProfileService profileService;
     private final EventService eventService;
@@ -31,66 +31,55 @@ public class EventActionService implements ActionService {
     }
 
     @Override
-    public FlyResult fly(final Player player) {
+    public ModifyFlightResult modifyFly(final Player player, final FlightStatus status) {
         Profile profile = this.profileService.get(player.getUniqueId());
 
-        if (profile.flightRemaining().isZero()) {
-            return FlyResult.NO_FLIGHT_REMAINING;
+        if (status == FlightStatus.ENABLED && profile.flightRemaining().isZero()) {
+            return ModifyFlightResult.NO_FLIGHT_REMAINING;
         }
 
-        if (profile.flying()) {
-            return FlyResult.ALREADY_FLYING;
+        if (profile.flightStatus() == status) {
+            return ModifyFlightResult.ALREADY_IN_STATE;
         }
 
-        if (this.playerCanFlyInWorld(player)) {
-            return FlyResult.NO_PERMISSION_IN_WORLD;
-        }
-
-        profile.flying(true);
-        player.setAllowFlight(true);
+        profile.flightStatus(status);
+        player.setAllowFlight(status == FlightStatus.ENABLED);
 
         this.eventService.post(new FlightChangeEvent(profile));
 
-        return FlyResult.SUCCESS;
+        return ModifyFlightResult.SUCCESS;
     }
 
     @Override
-    public ModifyFlyResult modifyFlight(final Profile profile, final UnaryOperator<Duration> modifier) {
-        ModifyFlyResult result = ModifyFlyResult.SUCCESS;
-
+    public ModifyFlightDurationResult modifyFlightDuration(final Profile profile, final UnaryOperator<Duration> modifier) {
         Duration modifiedDuration = modifier.apply(profile.flightRemaining());
 
         if (modifiedDuration.isNegative()) {
-            result = ModifyFlyResult.CAPPED_TO_ZERO;
             modifiedDuration = Duration.ZERO;
         }
 
         profile.flightRemaining(modifiedDuration);
-        this.stopFlyingIfDurationZero(profile);
 
-        return result;
-    }
-
-    private boolean playerCanFlyInWorld(final Player player) {
-        String world = player.getWorld().getName();
-
-        return player.hasPermission(PERMISSION_PREFIX + world);
-    }
-
-    private void stopFlyingIfDurationZero(final Profile profile) {
-        if (!profile.flightRemaining().isZero()) {
-            return;
+        if (this.modifyFlyIfDurationZero(profile)) {
+            return ModifyFlightDurationResult.DISABLED_FLIGHT;
         }
 
-        profile.flying(false);
+        return ModifyFlightDurationResult.SUCCESS;
+    }
 
-        Player player = Bukkit.getPlayer(profile.uuid());
+    private boolean modifyFlyIfDurationZero(final Profile profile) {
+        if (!profile.flightRemaining().isZero()) {
+            return false;
+        }
+
+        @Nullable Player player = Bukkit.getPlayer(profile.uuid());
 
         if (player == null) {
-            return;
+            return false;
         }
 
-        player.setAllowFlight(false);
+        this.modifyFly(player, FlightStatus.DISABLED);
+        return true;
     }
 
 }

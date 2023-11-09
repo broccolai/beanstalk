@@ -4,7 +4,10 @@ import com.google.inject.Inject;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.UUID;
+import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
+import love.broccolai.beanstalk.service.action.ActionService;
+import love.broccolai.beanstalk.service.action.result.ModifyFlightDurationResult;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.bukkit.Bukkit;
@@ -19,20 +22,23 @@ public class FlightCheckTask {
 
     private static final int ONE_SECOND_OF_TICKS = 20;
     private static final Duration ONE_SECOND_DURATION = Duration.ofSeconds(1);
-    private static final Duration ONE_MINUTE_DURATION = Duration.ofSeconds(1);
+    private static final Duration ONE_MINUTE_DURATION = Duration.ofSeconds(60);
 
     private final ProfileService profileService;
     private final MessageService messageService;
+    private final ActionService actionService;
     private final Plugin plugin;
 
     @Inject
     public FlightCheckTask(
         final ProfileService profileService,
         final MessageService messageService,
+        final ActionService actionService,
         final Plugin plugin
     ) {
         this.profileService = profileService;
         this.messageService = messageService;
+        this.actionService = actionService;
         this.plugin = plugin;
     }
 
@@ -54,7 +60,7 @@ public class FlightCheckTask {
         this.profileService.get(onlinePlayerIds)
             .values()
             .stream()
-            .filter(Profile::flying)
+            .filter(profile -> profile.flightStatus() == FlightStatus.ENABLED)
             .forEach(this::checkPlayer);
     }
 
@@ -65,22 +71,24 @@ public class FlightCheckTask {
             return;
         }
 
-        if (player.isFlying()) {
+        if (!player.isFlying()) {
             return;
         }
 
-        Duration newRemaining = profile.flightRemaining(current -> current.minus(ONE_SECOND_DURATION));
+        ModifyFlightDurationResult modificationResult = this.actionService.modifyFlightDuration(
+            profile,
+            current -> current.minus(ONE_SECOND_DURATION)
+        );
 
-        if (ONE_MINUTE_DURATION.equals(newRemaining)) {
+        if (ONE_MINUTE_DURATION.equals(profile.flightRemaining())) {
             this.messageService.minuteRemaining(player);
         }
 
-        if (!newRemaining.isZero()) {
+        if (modificationResult != ModifyFlightDurationResult.DISABLED_FLIGHT) {
             return;
         }
 
-        profile.flying(false);
-        this.messageService.disable(player);
+        this.messageService.ranOutOfTime(player);
     }
 
 }

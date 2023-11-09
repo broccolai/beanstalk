@@ -43,6 +43,9 @@ public interface MessageService {
     @Message("feedback.modify-target")
     void modifyTarget(@Receiver Audience receiver, @Placeholder Profile target, @Placeholder Duration duration);
 
+    @Message("notice.ran-out-of-time")
+    void ranOutOfTime(@Receiver Audience receiver);
+
     @Message("warning.minute-remaining")
     void minuteRemaining(@Receiver Audience receiver);
 }

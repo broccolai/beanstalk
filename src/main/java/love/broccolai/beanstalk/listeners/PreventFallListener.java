@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import com.google.inject.Singleton;
 import love.broccolai.beanstalk.event.FlightChangeEvent;
+import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.event.EventService;
 import org.bukkit.entity.Player;
@@ -49,7 +50,7 @@ public class PreventFallListener implements Listener {
     public void onFlightChange(final FlightChangeEvent event) {
         Profile profile = event.profile();
 
-        if (!profile.flying()) {
+        if (profile.flightStatus() == FlightStatus.ENABLED) {
             return;
         }
 

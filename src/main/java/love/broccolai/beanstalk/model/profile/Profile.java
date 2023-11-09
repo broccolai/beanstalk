@@ -13,9 +13,9 @@ public final class Profile {
     private Duration flightRemaining;
 
     // not persisted through restarts
-    private boolean flying;
+    private FlightStatus flying;
 
-    public Profile(final UUID uuid, final Duration flightRemaining, final boolean flying) {
+    public Profile(final UUID uuid, final Duration flightRemaining, final FlightStatus flying) {
         this.uuid = uuid;
         this.flightRemaining = flightRemaining;
         this.flying = flying;
@@ -39,11 +39,11 @@ public final class Profile {
         return this.flightRemaining;
     }
 
-    public boolean flying() {
+    public FlightStatus flightStatus() {
         return this.flying;
     }
 
-    public void flying(final boolean flying) {
+    public void flightStatus(final FlightStatus flying) {
         this.flying = flying;
     }
 

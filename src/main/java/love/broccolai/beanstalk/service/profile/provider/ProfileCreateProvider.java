@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -20,7 +21,7 @@ public final class ProfileCreateProvider implements PartialProfileProvider {
         Map<UUID, Profile> results = new HashMap<>();
 
         for (UUID request : requests) {
-            results.put(request, new Profile(request, Duration.ZERO, false));
+            results.put(request, new Profile(request, Duration.ZERO, FlightStatus.DISABLED));
         }
 
         return results;

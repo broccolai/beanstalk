@@ -5,9 +5,10 @@ import cloud.commandframework.CommandManager;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import java.time.Duration;
+import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.ActionService;
-import love.broccolai.beanstalk.service.action.result.FlyResult;
+import love.broccolai.beanstalk.service.action.result.ModifyFlightResult;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.bukkit.command.CommandSender;
@@ -66,29 +67,25 @@ public final class BeanstalkUserCommand implements PluginCommand {
     private void handleEnable(final CommandContext<CommandSender> context) {
         Player sender = (Player) context.getSender();
 
-        FlyResult actionResult = this.actionService.fly(sender);
+        ModifyFlightResult actionResult = this.actionService.modifyFly(sender, FlightStatus.ENABLED);
 
         switch (actionResult) {
             case NO_PERMISSION_IN_WORLD -> this.messageService.noPermissionInWorld(sender);
             case NO_FLIGHT_REMAINING -> this.messageService.noFlightRemaining(sender);
-            case ALREADY_FLYING -> this.messageService.alreadyEnabled(sender);
+            case ALREADY_IN_STATE -> this.messageService.alreadyEnabled(sender);
             case SUCCESS -> this.messageService.enable(sender);
         }
     }
 
     private void handleDisable(final CommandContext<CommandSender> context) {
         Player sender = (Player) context.getSender();
-        Profile profile = this.profileService.get(sender.getUniqueId());
 
-        if (!profile.flying()) {
-            this.messageService.alreadyDisabled(sender);
-            return;
+        ModifyFlightResult actionResult = this.actionService.modifyFly(sender, FlightStatus.ENABLED);
+
+        switch (actionResult) {
+            case ALREADY_IN_STATE -> this.messageService.alreadyDisabled(sender);
+            case SUCCESS -> this.messageService.disable(sender);
         }
-
-        profile.flying(false);
-        sender.setAllowFlight(false);
-
-        this.messageService.disable(sender);
     }
 
 }

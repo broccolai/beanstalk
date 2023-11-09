@@ -88,7 +88,7 @@ public final class BeanstalkAdminCommand implements PluginCommand {
         ModifyAction modifyAction = context.get("action");
         Duration duration = context.get("duration");
 
-        this.actionService.modifyFlight(target, flight -> switch (modifyAction) {
+        this.actionService.modifyFlightDuration(target, flight -> switch (modifyAction) {
             case GIVE -> flight.plus(duration);
             case REMOVE -> flight.minus(duration);
             case SET -> duration;
