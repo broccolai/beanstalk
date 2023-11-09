@@ -24,8 +24,6 @@ import love.broccolai.beanstalk.service.message.placeholder.StringPlaceholderRes
 import love.broccolai.beanstalk.service.message.receiver.BasicReceiverResolver;
 import love.broccolai.beanstalk.service.profile.PipelineProfileService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
-import love.broccolai.beanstalk.service.task.PaperTaskService;
-import love.broccolai.beanstalk.service.task.TaskService;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.moonshine.Moonshine;
 import net.kyori.moonshine.exception.scan.UnscannableMethodException;
@@ -42,7 +40,6 @@ public class ServiceModule extends AbstractModule {
     protected void configure() {
         this.bind(StorageService.class).to(DatabaseStorageService.class);
         this.bind(ProfileService.class).to(PipelineProfileService.class);
-        this.bind(TaskService.class).to(PaperTaskService.class);
         this.bind(ItemService.class).to(NBTItemService.class);
         this.bind(EventService.class).to(SimpleEventService.class);
         this.bind(ActionService.class).to(EventActionService.class);
