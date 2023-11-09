@@ -1,5 +1,6 @@
 package love.broccolai.beanstalk.service.event;
 
+import com.google.inject.Singleton;
 import com.seiama.event.EventSubscriber;
 import com.seiama.event.EventSubscription;
 import com.seiama.event.bus.EventBus;
@@ -10,6 +11,7 @@ import love.broccolai.beanstalk.event.Event;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+@Singleton
 @DefaultQualifier(NonNull.class)
 public class SimpleEventService implements EventService {
 

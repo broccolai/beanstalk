@@ -3,12 +3,14 @@ package love.broccolai.beanstalk.service.data;
 import com.google.inject.Inject;
 import java.util.Optional;
 import java.util.UUID;
+import com.google.inject.Singleton;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.utilities.QueriesLocator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jdbi.v3.core.Jdbi;
 
+@Singleton
 @DefaultQualifier(NonNull.class)
 public final class DatabaseStorageService implements StorageService {
 

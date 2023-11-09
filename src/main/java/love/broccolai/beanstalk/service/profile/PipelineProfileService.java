@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import com.google.inject.Singleton;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.profile.provider.PartialProfileProvider;
 import love.broccolai.beanstalk.service.profile.provider.ProfileCacheProvider;
@@ -20,6 +21,7 @@ import org.bukkit.OfflinePlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+@Singleton
 @DefaultQualifier(NonNull.class)
 public class PipelineProfileService implements ProfileService {
 

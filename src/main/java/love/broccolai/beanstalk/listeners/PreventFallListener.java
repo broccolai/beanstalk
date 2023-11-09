@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import com.google.inject.Singleton;
 import love.broccolai.beanstalk.event.FlightChangeEvent;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.event.EventService;
@@ -14,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+@Singleton
 @DefaultQualifier(NonNull.class)
 public class PreventFallListener implements Listener {
 
