@@ -6,6 +6,7 @@ import love.broccolai.beanstalk.service.message.annotations.Receiver;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.moonshine.annotation.Message;
 import net.kyori.moonshine.annotation.Placeholder;
+import org.bukkit.entity.Player;
 
 public interface MessageService {
 
@@ -21,6 +22,9 @@ public interface MessageService {
     @Message("feedback.already-enabled")
     void alreadyEnabled(@Receiver Audience receiver);
 
+    @Message("feedback.no-permission-in-world")
+    void noPermissionInWorld(@Receiver Audience receiver);
+
     @Message("feedback.no-flight-remaining")
     void noFlightRemaining(@Receiver Audience receiver);
 
@@ -31,7 +35,7 @@ public interface MessageService {
     void alreadyDisabled(@Receiver Audience receiver);
 
     @Message("feedback.generate")
-    void generate(@Receiver Audience receiver, @Placeholder Duration duration);
+    void generate(@Receiver Audience receiver, @Placeholder Player target, @Placeholder Duration duration);
 
     @Message("feedback.status-target")
     void statusTarget(@Receiver Audience receiver, @Placeholder Profile target, @Placeholder Duration duration);

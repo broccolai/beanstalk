@@ -72,7 +72,7 @@ public final class BeanstalkAdminCommand implements PluginCommand {
             this.itemService.create(duration)
         );
 
-        this.messageService.generate(sender, duration);
+        this.messageService.generate(sender, target, duration);
     }
 
     private void handleStatus(final CommandContext<CommandSender> context) {

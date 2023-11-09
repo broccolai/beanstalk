@@ -17,6 +17,8 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @DefaultQualifier(NonNull.class)
 public class EventActionService implements ActionService {
 
+    private static final String PERMISSION_PREFIX = "beanstalk.fly.";
+
     private final ProfileService profileService;
     private final EventService eventService;
 
@@ -36,6 +38,10 @@ public class EventActionService implements ActionService {
 
         if (profile.flying()) {
             return FlyResult.ALREADY_FLYING;
+        }
+
+        if (this.playerCanFlyInWorld(player)) {
+            return FlyResult.NO_PERMISSION_IN_WORLD;
         }
 
         profile.flying(true);
@@ -63,7 +69,13 @@ public class EventActionService implements ActionService {
         return result;
     }
 
-    private void stopFlyingIfDurationZero(Profile profile) {
+    private boolean playerCanFlyInWorld(final Player player) {
+        String world = player.getWorld().getName();
+
+        return player.hasPermission(PERMISSION_PREFIX + world);
+    }
+
+    private void stopFlyingIfDurationZero(final Profile profile) {
         if (!profile.flightRemaining().isZero()) {
             return;
         }
@@ -78,4 +90,5 @@ public class EventActionService implements ActionService {
 
         player.setAllowFlight(false);
     }
+
 }

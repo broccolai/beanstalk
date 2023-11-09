@@ -69,6 +69,7 @@ public final class BeanstalkUserCommand implements PluginCommand {
         FlyResult actionResult = this.actionService.fly(sender);
 
         switch (actionResult) {
+            case NO_PERMISSION_IN_WORLD -> this.messageService.noPermissionInWorld(sender);
             case NO_FLIGHT_REMAINING -> this.messageService.noFlightRemaining(sender);
             case ALREADY_FLYING -> this.messageService.alreadyEnabled(sender);
             case SUCCESS -> this.messageService.enable(sender);
