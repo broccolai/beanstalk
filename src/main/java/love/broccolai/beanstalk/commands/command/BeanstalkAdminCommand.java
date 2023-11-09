@@ -4,7 +4,7 @@ import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.DurationArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
-import cloud.commandframework.bukkit.parsers.PlayerArgument;
+import cloud.commandframework.bukkit.parsers.selector.SinglePlayerSelectorArgument;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import java.time.Duration;
@@ -43,7 +43,7 @@ public final class BeanstalkAdminCommand implements PluginCommand {
 
         commandManager.command(baseCommand
             .literal("generate")
-            .argument(PlayerArgument.of("target"))
+            .argument(SinglePlayerSelectorArgument.of("target"))
             .argument(DurationArgument.of("duration"))
             .handler(this::handleGenerate)
         );
