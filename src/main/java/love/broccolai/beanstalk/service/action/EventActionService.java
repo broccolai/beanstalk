@@ -6,8 +6,10 @@ import java.util.function.UnaryOperator;
 import love.broccolai.beanstalk.event.FlightChangeEvent;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.result.FlyResult;
+import love.broccolai.beanstalk.service.action.result.ModifyFlyResult;
 import love.broccolai.beanstalk.service.event.EventService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -45,8 +47,35 @@ public class EventActionService implements ActionService {
     }
 
     @Override
-    public void modifyFlight(final Profile profile, final UnaryOperator<Duration> modifier) {
+    public ModifyFlyResult modifyFlight(final Profile profile, final UnaryOperator<Duration> modifier) {
+        ModifyFlyResult result = ModifyFlyResult.SUCCESS;
 
+        Duration modifiedDuration = modifier.apply(profile.flightRemaining());
+
+        if (modifiedDuration.isNegative()) {
+            result = ModifyFlyResult.CAPPED_TO_ZERO;
+            modifiedDuration = Duration.ZERO;
+        }
+
+        profile.flightRemaining(modifiedDuration);
+        this.stopFlyingIfDurationZero(profile);
+
+        return result;
     }
 
+    private void stopFlyingIfDurationZero(Profile profile) {
+        if (!profile.flightRemaining().isZero()) {
+            return;
+        }
+
+        profile.flying(false);
+
+        Player player = Bukkit.getPlayer(profile.uuid());
+
+        if (player == null) {
+            return;
+        }
+
+        player.setAllowFlight(false);
+    }
 }

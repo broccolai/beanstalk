@@ -10,9 +10,9 @@ import com.google.inject.Inject;
 import java.time.Duration;
 import love.broccolai.beanstalk.commands.cloud.CloudArgumentFactory;
 import love.broccolai.beanstalk.model.profile.Profile;
+import love.broccolai.beanstalk.service.action.ActionService;
 import love.broccolai.beanstalk.service.item.ItemService;
 import love.broccolai.beanstalk.service.message.MessageService;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,16 +20,19 @@ public final class BeanstalkAdminCommand implements PluginCommand {
 
     private final CloudArgumentFactory argumentFactory;
     private final MessageService messageService;
+    private final ActionService actionService;
     private final ItemService itemService;
 
     @Inject
     public BeanstalkAdminCommand(
         final CloudArgumentFactory argumentFactory,
         final MessageService messageService,
+        final ActionService actionService,
         final ItemService service
     ) {
         this.argumentFactory = argumentFactory;
         this.messageService = messageService;
+        this.actionService = actionService;
         this.itemService = service;
     }
 
@@ -85,38 +88,18 @@ public final class BeanstalkAdminCommand implements PluginCommand {
         ModifyAction modifyAction = context.get("action");
         Duration duration = context.get("duration");
 
-        target.flightRemaining(flight -> {
-            return switch (modifyAction) {
-                case GIVE -> flight.plus(duration);
-                case REMOVE -> flight.minus(duration);
-            };
+        this.actionService.modifyFlight(target, flight -> switch (modifyAction) {
+            case GIVE -> flight.plus(duration);
+            case REMOVE -> flight.minus(duration);
+            case SET -> duration;
         });
-
-        //todo: move this to ActionService
-        this.stopFlyingIfDurationZero(target);
 
         this.messageService.modifyTarget(sender, target, target.flightRemaining());
     }
 
-    private void stopFlyingIfDurationZero(Profile profile) {
-        if (!profile.flightRemaining().isZero()) {
-            return;
-        }
-
-        profile.flying(false);
-
-        Player player = Bukkit.getPlayer(profile.uuid());
-
-        if (player == null) {
-            return;
-        }
-
-        player.setAllowFlight(false);
-    }
-
     private enum ModifyAction {
         GIVE,
-        REMOVE
+        REMOVE,
+        SET
     }
-
 }
