@@ -10,4 +10,4 @@ permissions :
         default: "op"
     beanstalk.user:
         description: "User permissions for beanstalk"
-        default: true
+        default: "op"
