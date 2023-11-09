@@ -14,9 +14,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 public final class BeanstalkImportCommand implements PluginCommand {
+
+    private static final String CUB_CONFIG_PREFIX = "FlightFeathers.FlyingTime";
 
     private final ProfileService profileService;
 
@@ -44,7 +45,7 @@ public final class BeanstalkImportCommand implements PluginCommand {
     }
 
     private void handleCubitoImport(final CommandContext<CommandSender> context) {
-        Player sender = (Player) context.getSender();
+        CommandSender sender = context.getSender();
 
         File folder = new File(Bukkit.getPluginsFolder(), "FlightFeathers");
         File file = new File(folder, "config.yml");
@@ -55,7 +56,7 @@ public final class BeanstalkImportCommand implements PluginCommand {
         }
 
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-        ConfigurationSection flightTimeSection = configuration.getConfigurationSection("FlightFeathers.FlyingTime");
+        ConfigurationSection flightTimeSection = configuration.getConfigurationSection(CUB_CONFIG_PREFIX);
 
         if (flightTimeSection == null) {
             sender.sendMessage("could not load cubito config.yml!");
@@ -64,7 +65,9 @@ public final class BeanstalkImportCommand implements PluginCommand {
 
         for (String serializedId : flightTimeSection.getKeys(false)) {
             UUID uuid = UUID.fromString(serializedId);
-            Duration duration = Duration.ofSeconds(configuration.getInt(serializedId));
+            String key = String.join(".", CUB_CONFIG_PREFIX, serializedId);
+
+            Duration duration = Duration.ofSeconds(configuration.getInt(key));
 
             if (duration.isZero()) {
                 continue;
