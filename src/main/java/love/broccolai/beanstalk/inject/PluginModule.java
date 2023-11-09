@@ -92,6 +92,10 @@ public final class PluginModule extends AbstractModule {
             commandManager.registerAsynchronousCompletions();
         }
 
+        if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
+            commandManager.registerBrigadier();
+        }
+
         commandManager.commandSuggestionProcessor(
             new FilteringCommandSuggestionProcessor<>(
                 FilteringCommandSuggestionProcessor.Filter.<CommandSender>contains(true).andTrimBeforeLastSpace()
