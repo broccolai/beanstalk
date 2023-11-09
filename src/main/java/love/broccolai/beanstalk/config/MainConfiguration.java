@@ -19,7 +19,11 @@ public final class MainConfiguration implements Configuration {
 
         public String name = "<light_purple><bold>Flight Feather";
 
-        public List<String> lore = List.of("<white>Provides <green><duration></green> of flight");
+        public List<String> lore = List.of(
+            "<white>Provides <green><duration></green> of flight",
+            "",
+            "<dark_gray>Right click to redeem"
+        );
 
         public int customModelData = 0;
 
