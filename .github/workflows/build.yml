@@ -14,3 +14,4 @@ jobs:
     secrets: inherit
     with:
       artifacts-path: 'build/libs/beanstalk.jar'
+      attach-artifacts-to-release: true
