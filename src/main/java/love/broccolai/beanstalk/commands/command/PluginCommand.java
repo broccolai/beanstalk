@@ -8,7 +8,8 @@ public interface PluginCommand {
 
     Class<? extends PluginCommand>[] COMMANDS = ArrayHelper.create(
         BeanstalkUserCommand.class,
-        BeanstalkAdminCommand.class
+        BeanstalkAdminCommand.class,
+        BeanstalkImportCommand.class
     );
 
     void register(CommandManager<CommandSender> commandManager);
