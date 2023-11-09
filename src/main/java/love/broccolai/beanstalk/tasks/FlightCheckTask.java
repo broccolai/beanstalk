@@ -71,12 +71,12 @@ public class FlightCheckTask {
 
         Duration newRemaining = profile.flightRemaining(current -> current.minus(ONE_SECOND_DURATION));
 
-        if (!newRemaining.isZero()) {
-            return;
-        }
-
         if (ONE_MINUTE_DURATION.equals(newRemaining)) {
             this.messageService.minuteRemaining(player);
+        }
+
+        if (!newRemaining.isZero()) {
+            return;
         }
 
         profile.flying(false);
