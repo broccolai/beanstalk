@@ -13,4 +13,6 @@ jobs:
     uses: "broccolai/actions/.github/workflows/shared-ci.yml@master"
     secrets: inherit
     with:
+      hangar-publish: true
+      modrinth-publish: true
       artifacts-path: 'build/libs/beanstalk.jar'

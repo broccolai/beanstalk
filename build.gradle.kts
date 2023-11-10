@@ -1,3 +1,5 @@
+import io.papermc.hangarpublishplugin.model.Platforms
+
 plugins {
     val indraVersion = "3.1.3"
     id("net.kyori.indra") version indraVersion
@@ -7,6 +9,9 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.2.0"
     id("xyz.jpenilla.gremlin-gradle") version "0.0.3"
     id("net.ltgt.errorprone") version "3.1.0"
+
+    id("io.papermc.hangar-publish-plugin") version "0.1.0"
+    id("com.modrinth.minotaur") version "2.7.5"
 }
 
 indra {
@@ -94,3 +99,28 @@ tasks {
     }
 }
 
+val releaseNotes = providers.environmentVariable("RELEASE_NOTES")
+val versions = listOf("1.20.2")
+val shadowJar = tasks.shadowJar.flatMap { it.archiveFile }
+
+hangarPublish.publications.register("plugin") {
+    version.set(project.version as String)
+    id.set("beanstalk")
+    channel.set("Release")
+    changelog.set(releaseNotes)
+    apiKey.set(providers.environmentVariable("HANGAR_UPLOAD_KEY"))
+    platforms.register(Platforms.PAPER) {
+        jar.set(shadowJar)
+        platformVersions.set(versions)
+    }
+}
+
+modrinth {
+    projectId.set("sUhzHs4l")
+    versionType.set("release")
+    file.set(shadowJar)
+    gameVersions.set(versions)
+    loaders.set(listOf("paper"))
+    changelog.set(releaseNotes)
+    token.set(providers.environmentVariable("MODRINTH_TOKEN"))
+}
