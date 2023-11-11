@@ -80,7 +80,7 @@ public final class BeanstalkUserCommand implements PluginCommand {
     private void handleDisable(final CommandContext<CommandSender> context) {
         Player sender = (Player) context.getSender();
 
-        ModifyFlightResult actionResult = this.actionService.modifyFly(sender, FlightStatus.ENABLED);
+        ModifyFlightResult actionResult = this.actionService.modifyFly(sender, FlightStatus.DISABLED);
 
         switch (actionResult) {
             case ALREADY_IN_STATE -> this.messageService.alreadyDisabled(sender);
