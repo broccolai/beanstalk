@@ -20,7 +20,7 @@ public final class DurationHelper {
             parts.add(hours + "h");
         }
 
-        if (hours == 0 && minutes > 0) {
+        if (minutes > 0) {
             parts.add(minutes + "m");
         }
 
