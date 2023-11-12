@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import io.leangen.geantyref.TypeToken;
 import java.time.Duration;
 import love.broccolai.beanstalk.config.LocaleConfiguration;
+import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.ActionService;
 import love.broccolai.beanstalk.service.action.EventActionService;
@@ -17,6 +18,7 @@ import love.broccolai.beanstalk.service.item.NBTItemService;
 import love.broccolai.beanstalk.service.message.MessageRenderer;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.message.placeholder.DurationPlaceholderResolver;
+import love.broccolai.beanstalk.service.message.placeholder.FlightStatusPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.placeholder.NumberPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.placeholder.PlayerPlaceholderResolver;
 import love.broccolai.beanstalk.service.message.placeholder.ProfilePlaceholderResolver;
@@ -54,7 +56,8 @@ public class ServiceModule extends AbstractModule {
         final NumberPlaceholderResolver numberPlaceholderResolver,
         final DurationPlaceholderResolver durationPlaceholderResolver,
         final PlayerPlaceholderResolver playerPlaceholderResolver,
-        final ProfilePlaceholderResolver profilePlaceholderResolver
+        final ProfilePlaceholderResolver profilePlaceholderResolver,
+        final FlightStatusPlaceholderResolver flightStatusPlaceholderResolver
     ) throws UnscannableMethodException {
         return Moonshine.<MessageService, Audience>builder(TypeToken.get(MessageService.class))
             .receiverLocatorResolver(basicReceiverResolver, 0)
@@ -69,6 +72,7 @@ public class ServiceModule extends AbstractModule {
             .weightedPlaceholderResolver(Duration.class, durationPlaceholderResolver, 1)
             .weightedPlaceholderResolver(Player.class, playerPlaceholderResolver, 1)
             .weightedPlaceholderResolver(Profile.class, profilePlaceholderResolver, 1)
+            .weightedPlaceholderResolver(FlightStatus.class, flightStatusPlaceholderResolver, 1)
             .create(this.getClass().getClassLoader());
     }
 

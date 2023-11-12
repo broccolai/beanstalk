@@ -1,6 +1,7 @@
 package love.broccolai.beanstalk.service.message;
 
 import java.time.Duration;
+import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.message.annotations.Receiver;
 import net.kyori.adventure.audience.Audience;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 public interface MessageService {
 
     @Message("feedback.status")
-    void status(@Receiver Audience receiver, @Placeholder Duration duration);
+    void status(@Receiver Audience receiver, @Placeholder FlightStatus status, @Placeholder Duration duration);
 
     @Message("feedback.redeemed")
     void redeemed(@Receiver Audience receiver, @Placeholder Duration redeemed, @Placeholder Duration duration);
@@ -38,7 +39,12 @@ public interface MessageService {
     void generate(@Receiver Audience receiver, @Placeholder Player target, @Placeholder Duration duration);
 
     @Message("feedback.status-target")
-    void statusTarget(@Receiver Audience receiver, @Placeholder Profile target, @Placeholder Duration duration);
+    void statusTarget(
+        @Receiver Audience receiver,
+        @Placeholder Profile target,
+        @Placeholder FlightStatus status,
+        @Placeholder Duration duration
+    );
 
     @Message("feedback.modify-target")
     void modifyTarget(@Receiver Audience receiver, @Placeholder Profile target, @Placeholder Duration duration);
@@ -48,4 +54,5 @@ public interface MessageService {
 
     @Message("warning.minute-remaining")
     void minuteRemaining(@Receiver Audience receiver);
+
 }

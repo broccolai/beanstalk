@@ -4,7 +4,6 @@ import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
-import java.time.Duration;
 import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.ActionService;
@@ -59,9 +58,7 @@ public final class BeanstalkUserCommand implements PluginCommand {
         Player sender = (Player) context.getSender();
         Profile profile = this.profileService.get(sender.getUniqueId());
 
-        Duration duration = profile.flightRemaining();
-
-        this.messageService.status(sender, duration);
+        this.messageService.status(sender, profile.flightStatus(), profile.flightRemaining());
     }
 
     private void handleEnable(final CommandContext<CommandSender> context) {

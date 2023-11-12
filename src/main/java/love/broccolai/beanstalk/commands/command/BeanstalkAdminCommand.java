@@ -79,7 +79,7 @@ public final class BeanstalkAdminCommand implements PluginCommand {
         Player sender = (Player) context.getSender();
         Profile target = context.get("target");
 
-        this.messageService.statusTarget(sender, target, target.flightRemaining());
+        this.messageService.statusTarget(sender, target, target.flightStatus(), target.flightRemaining());
     }
 
     private void handleModify(final CommandContext<CommandSender> context) {
