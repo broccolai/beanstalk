@@ -64,7 +64,7 @@ public final class BeanstalkAdminCommand implements PluginCommand {
     }
 
     private void handleGenerate(final CommandContext<CommandSender> context) {
-        Player sender = (Player) context.getSender();
+        CommandSender sender = context.getSender();
         Player target = context.get("target");
         Duration duration = context.get("duration");
 
@@ -76,14 +76,14 @@ public final class BeanstalkAdminCommand implements PluginCommand {
     }
 
     private void handleStatus(final CommandContext<CommandSender> context) {
-        Player sender = (Player) context.getSender();
+        CommandSender sender = context.getSender();
         Profile target = context.get("target");
 
         this.messageService.statusTarget(sender, target, target.flightStatus(), target.flightRemaining());
     }
 
     private void handleModify(final CommandContext<CommandSender> context) {
-        Player sender = (Player) context.getSender();
+        CommandSender sender = context.getSender();
         Profile target = context.get("target");
         ModifyAction modifyAction = context.get("action");
         Duration duration = context.get("duration");
