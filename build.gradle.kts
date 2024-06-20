@@ -5,18 +5,20 @@ plugins {
     id("net.kyori.indra") version indraVersion
     id("net.kyori.indra.checkstyle") version indraVersion
 
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("xyz.jpenilla.run-paper") version "2.2.0"
-    id("xyz.jpenilla.gremlin-gradle") version "0.0.3"
-    id("net.ltgt.errorprone") version "3.1.0"
+    id("io.github.goooler.shadow") version "8.1.7"
+    id("xyz.jpenilla.run-paper") version "2.3.0"
+    id("xyz.jpenilla.gremlin-gradle") version "0.0.6"
+    id("net.ltgt.errorprone") version "4.0.0"
 
-    id("io.papermc.hangar-publish-plugin") version "0.1.0"
-    id("com.modrinth.minotaur") version "2.7.5"
+    id("io.papermc.hangar-publish-plugin") version "0.1.2"
+    id("com.modrinth.minotaur") version "2.8.7"
+
+    id("com.github.ben-manes.versions") version "0.51.0"
 }
 
 indra {
     javaVersions {
-        target(17)
+        target(21)
     }
 }
 
@@ -33,9 +35,9 @@ fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: S
 }
 
 dependencies {
-    errorprone("com.google.errorprone", "error_prone_core", "2.23.0")
+    errorprone("com.google.errorprone", "error_prone_core", "2.28.0")
 
-    compileOnly("io.papermc.paper", "paper-api", "1.20.2-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
 
     runtimeDownloadApi("cloud.commandframework", "cloud-paper", "1.8.4")
     runtimeDownloadApi("cloud.commandframework", "cloud-minecraft-extras", "1.8.4")
@@ -43,16 +45,16 @@ dependencies {
     runtimeDownloadApi("com.google.inject.extensions", "guice-assistedinject", "7.0.0")
 
     runtimeDownloadApi("org.spongepowered", "configurate-hocon", "4.1.2")
-    runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.1.0")
+    runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.1.8")
 
     runtimeDownloadApi("broccolai.corn", "corn-minecraft-paper", "3.2.0")
     runtimeDownloadApi("com.seiama", "event-api", "1.0.0-SNAPSHOT")
 
     // database
-    runtimeDownloadApi("com.zaxxer", "HikariCP", "5.0.1")
-    runtimeDownloadApi("org.flywaydb", "flyway-core", "10.0.0")
+    runtimeDownloadApi("com.zaxxer", "HikariCP", "5.1.0")
+    runtimeDownloadApi("org.flywaydb", "flyway-core", "10.15.0")
     runtimeDownloadApi("com.h2database", "h2", "2.2.224")
-    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.41.3")
+    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.45.1")
 
     runtimeDownloadApi("net.kyori.moonshine", "moonshine-standard", "2.0.4")
 }
@@ -77,7 +79,7 @@ tasks {
 
     shadowJar {
         dependencies {
-            include(dependency("xyz.jpenilla:gremlin-runtime:0.0.3"))
+            include(dependency("xyz.jpenilla:gremlin-runtime:0.0.6"))
         }
 
         relocate("xyz.jpenilla.gremlin", "love.broccolai.beanstalk.lib.xyz.jpenilla.gremlin")
