@@ -36,7 +36,12 @@ public class SimpleEventService implements EventService {
         this.bus.post(event);
     }
 
-    private <E> void handleException(EventSubscription<? super E> eventSubscription, E e, Throwable throwable) {
+    private <E> void handleException(
+        final EventBus<? super E> bus,
+        final EventSubscription<? super E> subscription,
+        final E event,
+        final Throwable throwable
+    ) {
         throw new RuntimeException(throwable);
     }
 

@@ -67,7 +67,7 @@ public class NBTItemService implements ItemService {
 
         if (this.configuration.shouldGlow) {
             itemBuilder = itemBuilder
-                .addEnchant(Enchantment.DURABILITY, 1)
+                .addEnchant(Enchantment.UNBREAKING, 1)
                 .addFlag(ItemFlag.HIDE_ENCHANTS);
         }
 
