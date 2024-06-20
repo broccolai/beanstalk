@@ -1,20 +1,20 @@
 package love.broccolai.beanstalk.commands.command;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.arguments.standard.DurationArgument;
-import cloud.commandframework.arguments.standard.EnumArgument;
-import cloud.commandframework.bukkit.parsers.PlayerArgument;
-import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import java.time.Duration;
 import love.broccolai.beanstalk.commands.cloud.CloudArgumentFactory;
+import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.ActionService;
 import love.broccolai.beanstalk.service.item.ItemService;
 import love.broccolai.beanstalk.service.message.MessageService;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.bukkit.parser.PlayerParser;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.parser.standard.DurationParser;
+import org.incendo.cloud.parser.standard.EnumParser;
 
 public final class BeanstalkAdminCommand implements PluginCommand {
 
@@ -37,34 +37,34 @@ public final class BeanstalkAdminCommand implements PluginCommand {
     }
 
     @Override
-    public void register(final CommandManager<CommandSender> commandManager) {
-        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("beanstalk")
+    public void register(final CommandManager<Commander> commandManager) {
+        Command.Builder<Commander> baseCommand = commandManager.commandBuilder("beanstalk")
             .permission("beanstalk.admin");
 
         commandManager.command(baseCommand
             .literal("generate")
-            .argument(PlayerArgument.of("target"))
-            .argument(DurationArgument.of("duration"))
+            .required("target", PlayerParser.playerParser())
+            .required("duration", DurationParser.durationParser())
             .handler(this::handleGenerate)
         );
 
         commandManager.command(baseCommand
             .literal("status")
-            .argument(this.argumentFactory.profile("target", true))
+            .required("target", this.argumentFactory.profile())
             .handler(this::handleStatus)
         );
 
         commandManager.command(baseCommand
             .literal("modify")
-            .argument(EnumArgument.of(ModifyAction.class, "action"))
-            .argument(this.argumentFactory.profile("target", true))
-            .argument(DurationArgument.of("duration"))
+            .required("action", EnumParser.enumParser(ModifyAction.class))
+            .required("target", this.argumentFactory.profile())
+            .required("duration", DurationParser.durationParser())
             .handler(this::handleModify)
         );
     }
 
-    private void handleGenerate(final CommandContext<CommandSender> context) {
-        CommandSender sender = context.getSender();
+    private void handleGenerate(final CommandContext<Commander> context) {
+        Commander sender = context.sender();
         Player target = context.get("target");
         Duration duration = context.get("duration");
 
@@ -75,15 +75,15 @@ public final class BeanstalkAdminCommand implements PluginCommand {
         this.messageService.generate(sender, target, duration);
     }
 
-    private void handleStatus(final CommandContext<CommandSender> context) {
-        CommandSender sender = context.getSender();
+    private void handleStatus(final CommandContext<Commander> context) {
+        Commander sender = context.sender();
         Profile target = context.get("target");
 
         this.messageService.statusTarget(sender, target, target.flightStatus(), target.flightRemaining());
     }
 
-    private void handleModify(final CommandContext<CommandSender> context) {
-        CommandSender sender = context.getSender();
+    private void handleModify(final CommandContext<Commander> context) {
+        Commander sender = context.sender();
         Profile target = context.get("target");
         ModifyAction modifyAction = context.get("action");
         Duration duration = context.get("duration");

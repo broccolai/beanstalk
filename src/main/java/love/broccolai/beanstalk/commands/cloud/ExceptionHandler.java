@@ -1,30 +1,30 @@
 package love.broccolai.beanstalk.commands.cloud;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.bukkit.command.CommandSender;
+import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 
 @Singleton
 @DefaultQualifier(NonNull.class)
 public final class ExceptionHandler {
 
-    private final MinecraftExceptionHandler<CommandSender> adventureHandler;
+    private final MinecraftExceptionHandler<Commander> adventureHandler;
 
     @Inject
     public ExceptionHandler() {
         this.adventureHandler = this.generateAdventureHandler();
     }
 
-    private MinecraftExceptionHandler<CommandSender> generateAdventureHandler() {
-        return new MinecraftExceptionHandler<>();
+    private MinecraftExceptionHandler<Commander> generateAdventureHandler() {
+        return MinecraftExceptionHandler.createNative();
     }
 
-    public void apply(final CommandManager<CommandSender> commandManager) {
-        this.adventureHandler.apply(commandManager, sender -> sender);
+    public void apply(final CommandManager<Commander> commandManager) {
+        this.adventureHandler.registerTo(commandManager);
     }
 
 }

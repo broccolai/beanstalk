@@ -1,6 +1,5 @@
 package love.broccolai.beanstalk.service.profile;
 
-import cloud.commandframework.services.ServicePipeline;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.inject.Inject;
@@ -20,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.services.ServicePipeline;
 
 @Singleton
 @DefaultQualifier(NonNull.class)
@@ -65,7 +65,7 @@ public class PipelineProfileService implements ProfileService {
     public final Map<UUID, Profile> get(final Collection<UUID> uniqueIds) {
         Map<UUID, Profile> results = this.pipeline.pump(new ProfileServiceContext(uniqueIds))
             .through(PartialProfileProvider.TYPE)
-            .getResult();
+            .complete();
 
         this.cacheProvider.cache(results);
 

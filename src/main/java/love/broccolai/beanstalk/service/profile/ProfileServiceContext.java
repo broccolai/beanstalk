@@ -1,11 +1,11 @@
 package love.broccolai.beanstalk.service.profile;
 
-import cloud.commandframework.services.ChunkedRequestContext;
 import java.util.Collection;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.Profile;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.services.ChunkedRequestContext;
 
 @DefaultQualifier(NonNull.class)
 public final class ProfileServiceContext extends ChunkedRequestContext<UUID, Profile> {
