@@ -1,19 +1,20 @@
 package love.broccolai.beanstalk.commands.command;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import java.io.File;
 import java.time.Duration;
 import java.util.UUID;
+import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.service.profile.ProfileService;
 import love.broccolai.beanstalk.service.profile.provider.ProfileCacheProvider;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
 
 public final class BeanstalkImportCommand implements PluginCommand {
 
@@ -33,8 +34,8 @@ public final class BeanstalkImportCommand implements PluginCommand {
     }
 
     @Override
-    public void register(final CommandManager<CommandSender> commandManager) {
-        Command.Builder<CommandSender> baseCommand = commandManager.commandBuilder("beanstalk")
+    public void register(final CommandManager<Commander> commandManager) {
+        Command.Builder<Commander> baseCommand = commandManager.commandBuilder("beanstalk")
             .permission("beanstalk.admin")
             .literal("import");
         
@@ -44,14 +45,14 @@ public final class BeanstalkImportCommand implements PluginCommand {
         );
     }
 
-    private void handleCubitoImport(final CommandContext<CommandSender> context) {
-        CommandSender sender = context.getSender();
+    private void handleCubitoImport(final CommandContext<Commander> context) {
+        Commander sender = context.sender();
 
         File folder = new File(Bukkit.getPluginsFolder(), "FlightFeathers");
         File file = new File(folder, "config.yml");
 
         if (!file.exists()) {
-            sender.sendMessage("cubito config.yml does not exist!");
+            sender.sendMessage(Component.text("cubito config.yml does not exist!"));
             return;
         }
 
@@ -59,7 +60,7 @@ public final class BeanstalkImportCommand implements PluginCommand {
         ConfigurationSection flightTimeSection = configuration.getConfigurationSection(CUB_CONFIG_PREFIX);
 
         if (flightTimeSection == null) {
-            sender.sendMessage("could not load cubito config.yml!");
+            sender.sendMessage(Component.text("could not load cubito config.yml!"));
             return;
         }
 
@@ -74,11 +75,11 @@ public final class BeanstalkImportCommand implements PluginCommand {
             }
 
             this.profileService.get(uuid).flightRemaining(current -> current.plus(duration));
-            sender.sendMessage("imported " + duration.toSeconds() + "s for " + uuid);
+            sender.sendMessage(Component.text("imported " + duration.toSeconds() + "s for " + uuid));
         }
 
         this.profileCacheProvider.close();
-        sender.sendMessage("successfully imported from cubito!");
+        sender.sendMessage(Component.text("successfully imported from cubito!"));
     }
 
 }

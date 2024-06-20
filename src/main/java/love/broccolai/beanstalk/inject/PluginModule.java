@@ -1,27 +1,29 @@
 package love.broccolai.beanstalk.inject;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.bukkit.CloudBukkitCapabilities;
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
-import cloud.commandframework.execution.FilteringCommandSuggestionProcessor;
-import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.sql.DataSource;
 import love.broccolai.beanstalk.Beanstalk;
 import love.broccolai.beanstalk.commands.cloud.ExceptionHandler;
+import love.broccolai.beanstalk.commands.cloud.captions.BeanstalkCaptionProvider;
+import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.data.ProfileMapper;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.flywaydb.core.Flyway;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.SenderMapper;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.suggestion.FilteringSuggestionProcessor;
 import org.jdbi.v3.core.Jdbi;
 import org.slf4j.Logger;
 
@@ -79,30 +81,28 @@ public final class PluginModule extends AbstractModule {
 
     @Provides
     @Singleton
-    private CommandManager<CommandSender> commandManager(
+    private CommandManager<Commander> commandManager(
         final Plugin plugin,
         final ExceptionHandler exceptionHandler
-    ) throws Exception {
-        PaperCommandManager<CommandSender> commandManager = PaperCommandManager.createNative(
-            plugin,
-            AsynchronousCommandExecutionCoordinator.<CommandSender>builder().withAsynchronousParsing().build()
+    ) {
+        SenderMapper<CommandSourceStack, Commander> senderMapper = SenderMapper.create(
+            Commander::from,
+            Commander::stack
         );
 
-        if (commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
-            commandManager.registerAsynchronousCompletions();
-        }
+        PaperCommandManager<Commander> commandManager = PaperCommandManager.builder(senderMapper)
+            .executionCoordinator(ExecutionCoordinator.asyncCoordinator())
+            .buildOnEnable(plugin);
 
-        if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
-            commandManager.registerBrigadier();
-        }
-
-        commandManager.commandSuggestionProcessor(
-            new FilteringCommandSuggestionProcessor<>(
-                FilteringCommandSuggestionProcessor.Filter.<CommandSender>contains(true).andTrimBeforeLastSpace()
+        commandManager.suggestionProcessor(
+            new FilteringSuggestionProcessor<>(
+                FilteringSuggestionProcessor.Filter.contains(true)
             )
         );
 
         exceptionHandler.apply(commandManager);
+
+        commandManager.captionRegistry().registerProvider(new BeanstalkCaptionProvider());
 
         return commandManager;
     }

@@ -27,6 +27,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.broccol.ai/releases/")
     sonatype.s01Snapshots()
+    sonatype.ossSnapshots()
 }
 
 fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: String) {
@@ -39,8 +40,8 @@ dependencies {
 
     compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
 
-    runtimeDownloadApi("cloud.commandframework", "cloud-paper", "1.8.4")
-    runtimeDownloadApi("cloud.commandframework", "cloud-minecraft-extras", "1.8.4")
+    runtimeDownloadApi("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
+    runtimeDownloadApi("org.incendo", "cloud-minecraft-extras", "2.0.0-SNAPSHOT")
     runtimeDownloadApi("com.google.inject", "guice", "7.0.0")
     runtimeDownloadApi("com.google.inject.extensions", "guice-assistedinject", "7.0.0")
 
@@ -70,7 +71,7 @@ configurations.runtimeDownload {
 
 tasks {
     runServer {
-        minecraftVersion("1.20.2")
+        minecraftVersion("1.21")
     }
 
     processResources {

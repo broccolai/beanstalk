@@ -1,8 +1,8 @@
 package love.broccolai.beanstalk.commands.command;
 
-import cloud.commandframework.CommandManager;
+import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.utilities.ArrayHelper;
-import org.bukkit.command.CommandSender;
+import org.incendo.cloud.CommandManager;
 
 public interface PluginCommand {
 
@@ -12,5 +12,5 @@ public interface PluginCommand {
         BeanstalkImportCommand.class
     );
 
-    void register(CommandManager<CommandSender> commandManager);
+    void register(CommandManager<Commander> commandManager);
 }
