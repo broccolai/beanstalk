@@ -7,6 +7,7 @@ import love.broccolai.beanstalk.commands.cloud.captions.BeanstalkCaptionKeys;
 import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.profile.ProfileService;
+import love.broccolai.corn.trove.Trove;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.caption.CaptionVariable;
@@ -48,8 +49,7 @@ public class ProfileDescriptor implements DescribedArgumentParser<Profile> {
         final CommandContext<Commander> commandContext,
         final CommandInput input
     ) {
-        return Bukkit.getOnlinePlayers()
-            .stream()
+        return Trove.of(Bukkit.getOnlinePlayers())
             .map(Player::getName)
             .toList();
     }

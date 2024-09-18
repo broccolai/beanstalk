@@ -25,7 +25,7 @@ indra {
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.broccol.ai/releases/")
+    maven("https://repo.broccol.ai/snapshots/")
     sonatype.s01Snapshots()
     sonatype.ossSnapshots()
 }
@@ -49,7 +49,8 @@ dependencies {
     runtimeDownloadApi("org.spongepowered", "configurate-hocon", "4.1.2")
     runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.1.8")
 
-    runtimeDownloadApi("broccolai.corn", "corn-minecraft-paper", "3.2.0")
+    runtimeDownloadApi("love.broccolai.corn", "corn-minecraft", "4.0.0-SNAPSHOT")
+    runtimeDownloadApi("love.broccolai.corn", "corn-trove", "4.0.0-SNAPSHOT")
     runtimeDownloadApi("com.seiama", "event-api", "1.0.0-SNAPSHOT")
 
     // database
@@ -96,7 +97,7 @@ tasks {
     writeDependencies {
         repos.set(listOf(
             "https://repo.papermc.io/repository/maven-public/",
-            "https://repo.broccol.ai/releases/",
+            "https://repo.broccol.ai/snapshots/",
             "https://repo.maven.apache.org/maven2/",
             "https://s01.oss.sonatype.org/content/repositories/snapshots/"
         ))

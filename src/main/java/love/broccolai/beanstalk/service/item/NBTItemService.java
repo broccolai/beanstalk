@@ -1,6 +1,5 @@
 package love.broccolai.beanstalk.service.item;
 
-import broccolai.corn.paper.item.PaperItemBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.time.Duration;
@@ -9,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import love.broccolai.beanstalk.config.MainConfiguration;
 import love.broccolai.beanstalk.utilities.DurationHelper;
+import love.broccolai.corn.minecraft.item.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -58,11 +58,11 @@ public class NBTItemService implements ItemService {
             .map(line -> MINI.deserialize(line, placeholders))
             .toList();
 
-        PaperItemBuilder itemBuilder = PaperItemBuilder.ofType(material)
+        ItemBuilder itemBuilder = ItemBuilder.itemBuilder(material)
             .name(MINI.deserialize(this.configuration.name, placeholders))
             .lore(lore)
             .customModelData(this.configuration.customModelData)
-            .setData(this.durationKey, PersistentDataType.LONG, duration.getSeconds());
+            .data(this.durationKey, PersistentDataType.LONG, duration.getSeconds());
 
         if (this.configuration.shouldGlow) {
             itemBuilder = itemBuilder

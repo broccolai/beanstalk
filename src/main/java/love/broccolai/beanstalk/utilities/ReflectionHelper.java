@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public final class ReflectionHelper {
@@ -24,6 +24,7 @@ public final class ReflectionHelper {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Collection<T> parametersAnnotatedBy(
             final Class<? extends Annotation> annotationClass,
             final Method method,
@@ -32,11 +33,9 @@ public final class ReflectionHelper {
         Collection<T> results = new ArrayList<>();
         Parameter[] reflectedParameters = method.getParameters();
 
-        for (int i = 0; i < reflectedParameters.length; i++) {
-            @Nullable Parameter reflectedParameter = reflectedParameters[i];
-            if (reflectedParameter != null && reflectedParameter.isAnnotationPresent(annotationClass)) {
-                //noinspection unchecked
-                results.add((T) objectParameters[i]);
+        for (final Parameter reflectedParameter : reflectedParameters) {
+            if (reflectedParameter.isAnnotationPresent(annotationClass)) {
+                results.add((T) reflectedParameter);
             }
         }
 

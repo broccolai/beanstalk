@@ -2,14 +2,13 @@ package love.broccolai.beanstalk.tasks;
 
 import com.google.inject.Inject;
 import java.time.Duration;
-import java.util.Collection;
-import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.ActionService;
 import love.broccolai.beanstalk.service.action.result.ModifyFlightDurationResult;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
+import love.broccolai.corn.trove.Trove;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -50,14 +49,11 @@ public class FlightCheckTask {
     }
 
     private void run() {
-        Collection<UUID> onlinePlayerIds = Bukkit.getOnlinePlayers()
-            .stream()
+        // todo: the pipeline could be used to buffer multiple players at the same time, but none of the services properly
+        //       support batching yet, once we have support for that, we can use the pipeline to get all online players.
+        Trove.of(Bukkit.getOnlinePlayers())
             .map(Player::getUniqueId)
-            .toList();
-
-        this.profileService.get(onlinePlayerIds)
-            .values()
-            .stream()
+            .map(this.profileService::get)
             .filter(profile -> profile.flightStatus() == FlightStatus.ENABLED)
             .forEach(this::checkPlayer);
     }
