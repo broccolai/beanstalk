@@ -5,10 +5,10 @@ plugins {
     id("net.kyori.indra") version indraVersion
     id("net.kyori.indra.checkstyle") version indraVersion
 
-    id("io.github.goooler.shadow") version "8.1.7"
-    id("xyz.jpenilla.run-paper") version "2.3.0"
+    id("com.gradleup.shadow") version "8.3.2"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
     id("xyz.jpenilla.gremlin-gradle") version "0.0.6"
-    id("net.ltgt.errorprone") version "4.0.0"
+    id("net.ltgt.errorprone") version "4.0.1"
 
     id("io.papermc.hangar-publish-plugin") version "0.1.2"
     id("com.modrinth.minotaur") version "2.8.7"
@@ -36,7 +36,7 @@ fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: S
 }
 
 dependencies {
-    errorprone("com.google.errorprone", "error_prone_core", "2.28.0")
+    errorprone("com.google.errorprone", "error_prone_core", "2.32.0")
 
     compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
 
@@ -53,9 +53,9 @@ dependencies {
 
     // database
     runtimeDownloadApi("com.zaxxer", "HikariCP", "5.1.0")
-    runtimeDownloadApi("org.flywaydb", "flyway-core", "10.15.0")
-    runtimeDownloadApi("com.h2database", "h2", "2.2.224")
-    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.45.1")
+    runtimeDownloadApi("org.flywaydb", "flyway-core", "10.18.0")
+    runtimeDownloadApi("com.h2database", "h2", "2.2.232")
+    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.45.4")
 
     runtimeDownloadApi("net.kyori.moonshine", "moonshine-standard", "2.0.4")
 }
