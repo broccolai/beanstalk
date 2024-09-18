@@ -3,10 +3,9 @@ package love.broccolai.beanstalk.model.profile;
 import java.time.Duration;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class Profile {
 
     private final UUID uuid;

@@ -11,12 +11,10 @@ import java.util.Map;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.data.StorageService;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class ProfileCacheProvider implements PartialProfileProvider, Closeable {
 
     private final StorageService storageService;
@@ -37,7 +35,7 @@ public final class ProfileCacheProvider implements PartialProfileProvider, Close
         Map<UUID, Profile> results = new HashMap<>();
 
         for (final UUID request : requests) {
-            @Nullable Profile profile = this.uuidCache.getIfPresent(request);
+            Profile profile = this.uuidCache.getIfPresent(request);
 
             if (profile != null) {
                 results.put(request, profile);

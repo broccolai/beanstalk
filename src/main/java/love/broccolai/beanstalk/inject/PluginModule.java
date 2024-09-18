@@ -16,8 +16,6 @@ import love.broccolai.beanstalk.commands.cloud.captions.BeanstalkCaptionProvider
 import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.data.ProfileMapper;
 import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.flywaydb.core.Flyway;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.SenderMapper;
@@ -25,9 +23,10 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.suggestion.FilteringSuggestionProcessor;
 import org.jdbi.v3.core.Jdbi;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class PluginModule extends AbstractModule {
 
     private final Beanstalk plugin;

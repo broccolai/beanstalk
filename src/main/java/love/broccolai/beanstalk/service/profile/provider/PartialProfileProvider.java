@@ -5,7 +5,9 @@ import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.profile.ProfileServiceContext;
 import org.incendo.cloud.services.type.PartialResultService;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface PartialProfileProvider extends PartialResultService<UUID, Profile, ProfileServiceContext> {
 
     TypeToken<PartialProfileProvider> TYPE = TypeToken.get(PartialProfileProvider.class);

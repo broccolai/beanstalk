@@ -39,6 +39,7 @@ dependencies {
     errorprone("com.google.errorprone", "error_prone_core", "2.32.0")
 
     compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
+    compileOnly("org.jspecify", "jspecify", "1.0.0")
 
     runtimeDownloadApi("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
     runtimeDownloadApi("org.incendo", "cloud-minecraft-extras", "2.0.0-SNAPSHOT")
@@ -54,7 +55,7 @@ dependencies {
     // database
     runtimeDownloadApi("com.zaxxer", "HikariCP", "5.1.0")
     runtimeDownloadApi("org.flywaydb", "flyway-core", "10.18.0")
-    runtimeDownloadApi("com.h2database", "h2", "2.2.232")
+    runtimeDownloadApi("com.h2database", "h2", "2.3.232")
     runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.45.4")
 
     runtimeDownloadApi("net.kyori.moonshine", "moonshine-standard", "2.0.4")

@@ -3,12 +3,11 @@ package love.broccolai.beanstalk.utilities;
 import com.google.common.base.Splitter;
 import java.util.List;
 import love.broccolai.beanstalk.Beanstalk;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jdbi.v3.core.locator.ClasspathSqlLocator;
 import org.jdbi.v3.core.locator.internal.ClasspathBuilder;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class QueriesLocator {
 
     private static final String QUERY_FOLDER = "queries/";

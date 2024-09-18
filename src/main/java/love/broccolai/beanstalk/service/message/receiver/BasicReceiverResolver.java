@@ -8,11 +8,10 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.moonshine.exception.ReceiverMissingException;
 import net.kyori.moonshine.receiver.IReceiverLocator;
 import net.kyori.moonshine.receiver.IReceiverLocatorResolver;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class BasicReceiverResolver implements IReceiverLocatorResolver<Audience> {
 
     @Override
@@ -31,7 +30,7 @@ public final class BasicReceiverResolver implements IReceiverLocatorResolver<Aud
                 final Object proxy,
                 final @Nullable Object[] parameters
         ) throws ReceiverMissingException {
-            @Nullable Object presentValue = ReflectionHelper.parameterAnnotatedBy(Receiver.class, method, parameters);
+            Object presentValue = ReflectionHelper.parameterAnnotatedBy(Receiver.class, method, parameters);
 
             if (presentValue == null) {
                 return null;

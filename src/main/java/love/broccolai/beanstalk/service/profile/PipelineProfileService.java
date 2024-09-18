@@ -17,12 +17,11 @@ import love.broccolai.beanstalk.service.profile.provider.ProfileCreateProvider;
 import love.broccolai.beanstalk.service.profile.provider.ProfileDataProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.incendo.cloud.services.ServicePipeline;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public class PipelineProfileService implements ProfileService {
 
     private static final String UNKNOWN_PLAYER = "UNKNOWN";

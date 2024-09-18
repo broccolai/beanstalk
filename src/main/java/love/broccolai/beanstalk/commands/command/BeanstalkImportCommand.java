@@ -15,7 +15,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class BeanstalkImportCommand implements PluginCommand {
 
     private static final String CUB_CONFIG_PREFIX = "FlightFeathers.FlyingTime";

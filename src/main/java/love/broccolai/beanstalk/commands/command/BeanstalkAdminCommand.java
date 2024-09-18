@@ -15,7 +15,9 @@ import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.DurationParser;
 import org.incendo.cloud.parser.standard.EnumParser;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class BeanstalkAdminCommand implements PluginCommand {
 
     private final CloudArgumentFactory argumentFactory;

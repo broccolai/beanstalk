@@ -7,13 +7,12 @@ import java.util.Map;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Final provider to use, creates the profile.
  */
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class ProfileCreateProvider implements PartialProfileProvider {
 
     @Override

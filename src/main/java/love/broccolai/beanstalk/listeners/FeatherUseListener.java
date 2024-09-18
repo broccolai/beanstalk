@@ -12,11 +12,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public class FeatherUseListener implements Listener {
 
     private final MessageService messageService;
@@ -42,27 +40,25 @@ public class FeatherUseListener implements Listener {
             return;
         }
 
-        @Nullable ItemStack item = event.getItem();
+        ItemStack item = event.getItem();
 
         if (item == null) {
             return;
         }
 
-        @Nullable Duration flightsDuration = this.itemService.flightDurationOfItem(item);
+        this.itemService.flightDurationOfItem(item)
+            .ifPresent(duration -> this.redeem(event.getPlayer(), item, duration));
+    }
 
-        if (flightsDuration == null) {
-            return;
-        }
-
-        Player player = event.getPlayer();
+    private void redeem(Player player, ItemStack item, Duration redeemableDuration) {
         Profile profile = this.profileService.get(player.getUniqueId());
 
-        Duration newRemaining = profile.flightRemaining().plus(flightsDuration);
+        Duration newRemaining = profile.flightRemaining().plus(redeemableDuration);
         profile.flightRemaining(newRemaining);
 
         item.setAmount(item.getAmount() - 1);
 
-        this.messageService.redeemed(player, flightsDuration, newRemaining);
+        this.messageService.redeemed(player, redeemableDuration, newRemaining);
     }
 
 }

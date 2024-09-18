@@ -3,7 +3,9 @@ package love.broccolai.beanstalk.utilities;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class DurationHelper {
 
     private DurationHelper() {

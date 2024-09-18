@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import love.broccolai.beanstalk.config.MainConfiguration;
 import love.broccolai.beanstalk.utilities.DurationHelper;
 import net.kyori.adventure.text.Component;
@@ -20,12 +21,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public class NBTItemService implements ItemService {
 
     //todo: find a way to integrate this with moonshine!
@@ -75,23 +74,23 @@ public class NBTItemService implements ItemService {
     }
 
     @Override
-    public @Nullable Duration flightDurationOfItem(final ItemStack item) {
+    public Optional<Duration> flightDurationOfItem(final ItemStack item) {
         ItemMeta meta = item.getItemMeta();
 
         if (meta == null) {
-            return null;
+            return Optional.empty();
         }
 
-        @Nullable Long duration = meta.getPersistentDataContainer().get(
+        Long duration = meta.getPersistentDataContainer().get(
             this.durationKey,
             PersistentDataType.LONG
         );
 
         if (duration == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return Duration.ofSeconds(duration);
+        return Optional.of(Duration.ofSeconds(duration));
     }
 
 }

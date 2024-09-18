@@ -5,10 +5,9 @@ import java.util.Map;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.Service;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public interface ProfileService extends Service {
 
     Profile get(UUID uuid);

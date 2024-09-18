@@ -8,11 +8,10 @@ import com.seiama.event.bus.SimpleEventBus;
 import com.seiama.event.registry.EventRegistry;
 import com.seiama.event.registry.SimpleEventRegistry;
 import love.broccolai.beanstalk.event.Event;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public class SimpleEventService implements EventService {
 
     private final EventRegistry<Event> registry;

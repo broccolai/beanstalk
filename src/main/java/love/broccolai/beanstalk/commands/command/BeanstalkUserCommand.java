@@ -12,7 +12,9 @@ import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class BeanstalkUserCommand implements PluginCommand {
 
     private final MessageService messageService;
@@ -68,6 +70,9 @@ public final class BeanstalkUserCommand implements PluginCommand {
         switch (actionResult) {
             case ALREADY_IN_STATE -> this.messageService.alreadyDisabled(sender);
             case SUCCESS -> this.messageService.disable(sender);
+            default -> {
+                // todo: other cases are not possible for disabling, we should spilt the result
+            }
         }
     }
 

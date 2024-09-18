@@ -13,12 +13,10 @@ import love.broccolai.beanstalk.service.event.EventService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public class EventActionService implements ActionService {
 
     private final ProfileService profileService;
@@ -72,7 +70,7 @@ public class EventActionService implements ActionService {
             return false;
         }
 
-        @Nullable Player player = Bukkit.getPlayer(profile.uuid());
+        Player player = Bukkit.getPlayer(profile.uuid());
 
         if (player == null) {
             return false;

@@ -1,12 +1,11 @@
 package love.broccolai.beanstalk.commands.cloud.captions;
 
 import love.broccolai.beanstalk.commands.cloud.commander.Commander;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.incendo.cloud.caption.CaptionProvider;
 import org.incendo.cloud.caption.DelegatingCaptionProvider;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public class BeanstalkCaptionProvider extends DelegatingCaptionProvider<Commander> {
 
     public static final String ARGUMENT_PARSE_FAILURE_PROFILE = "Could not parse profile for <input>";

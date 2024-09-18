@@ -5,11 +5,9 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 @SuppressWarnings("UnstableApiUsage")
 public class Commander implements ForwardingAudience.Single {
     private final CommandSourceStack stack;
@@ -20,7 +18,7 @@ public class Commander implements ForwardingAudience.Single {
 
     @Override
     public Audience audience() {
-        final @Nullable Entity executor = this.stack.getExecutor();
+        final Entity executor = this.stack.getExecutor();
         return executor == null ? this.stack.getSender() : executor;
     }
 

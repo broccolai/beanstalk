@@ -9,15 +9,14 @@ import net.kyori.moonshine.placeholder.ConclusionValue;
 import net.kyori.moonshine.placeholder.ContinuanceValue;
 import net.kyori.moonshine.placeholder.IPlaceholderResolver;
 import net.kyori.moonshine.util.Either;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public interface SinglePlaceholderResolver<T> extends IPlaceholderResolver<Audience, T, Component> {
 
     @Override
-    default @Nullable Map<String, Either<ConclusionValue<? extends Component>, ContinuanceValue<?>>> resolve(
+    default Map<String, Either<ConclusionValue<? extends Component>, ContinuanceValue<?>>> resolve(
         final String placeholderName,
         final T value,
         final Audience receiver,

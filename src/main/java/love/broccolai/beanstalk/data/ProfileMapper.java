@@ -6,13 +6,12 @@ import java.time.Duration;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jdbi.v3.core.mapper.ColumnMapper;
 import org.jdbi.v3.core.mapper.RowMapper;
 import org.jdbi.v3.core.statement.StatementContext;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class ProfileMapper implements RowMapper<Profile> {
 
     @Override

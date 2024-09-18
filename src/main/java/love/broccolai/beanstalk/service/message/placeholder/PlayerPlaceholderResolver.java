@@ -8,13 +8,12 @@ import net.kyori.moonshine.placeholder.ConclusionValue;
 import net.kyori.moonshine.placeholder.ContinuanceValue;
 import net.kyori.moonshine.util.Either;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import static net.kyori.moonshine.placeholder.ConclusionValue.conclusionValue;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class PlayerPlaceholderResolver implements SinglePlaceholderResolver<Player> {
 
     @Override

@@ -13,11 +13,9 @@ import love.broccolai.beanstalk.service.profile.ProfileService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public class FlightCheckTask {
 
     private static final int ONE_SECOND_OF_TICKS = 20;
@@ -65,7 +63,7 @@ public class FlightCheckTask {
     }
 
     private void checkPlayer(final Profile profile) {
-        @Nullable Player player = Bukkit.getPlayer(profile.uuid());
+        Player player = Bukkit.getPlayer(profile.uuid());
 
         if (player == null) {
             return;

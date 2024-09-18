@@ -8,7 +8,9 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.moonshine.annotation.Message;
 import net.kyori.moonshine.annotation.Placeholder;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface MessageService {
 
     @Message("feedback.status")

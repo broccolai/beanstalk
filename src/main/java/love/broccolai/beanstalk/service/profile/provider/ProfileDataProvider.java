@@ -8,11 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.data.StorageService;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class ProfileDataProvider implements PartialProfileProvider {
 
     private final StorageService storageService;

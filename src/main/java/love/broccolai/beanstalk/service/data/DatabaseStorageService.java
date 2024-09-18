@@ -6,12 +6,11 @@ import java.util.Optional;
 import java.util.UUID;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.utilities.QueriesLocator;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jdbi.v3.core.Jdbi;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class DatabaseStorageService implements StorageService {
 
     private final QueriesLocator locator = new QueriesLocator();

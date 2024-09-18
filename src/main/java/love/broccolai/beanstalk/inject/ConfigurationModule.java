@@ -12,15 +12,14 @@ import love.broccolai.beanstalk.Beanstalk;
 import love.broccolai.beanstalk.config.Configuration;
 import love.broccolai.beanstalk.config.LocaleConfiguration;
 import love.broccolai.beanstalk.config.MainConfiguration;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class ConfigurationModule extends AbstractModule {
 
     @Provides

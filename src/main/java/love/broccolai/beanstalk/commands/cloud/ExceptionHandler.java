@@ -3,13 +3,12 @@ package love.broccolai.beanstalk.commands.cloud;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import love.broccolai.beanstalk.commands.cloud.commander.Commander;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
+import org.jspecify.annotations.NullMarked;
 
 @Singleton
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public final class ExceptionHandler {
 
     private final MinecraftExceptionHandler<Commander> adventureHandler;

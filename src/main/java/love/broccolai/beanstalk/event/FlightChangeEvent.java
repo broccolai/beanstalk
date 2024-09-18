@@ -1,10 +1,9 @@
 package love.broccolai.beanstalk.event;
 
 import love.broccolai.beanstalk.model.profile.Profile;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public record FlightChangeEvent(Profile profile) implements Event {
 
 }

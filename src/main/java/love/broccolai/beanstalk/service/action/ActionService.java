@@ -7,10 +7,9 @@ import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.action.result.ModifyFlightDurationResult;
 import love.broccolai.beanstalk.service.action.result.ModifyFlightResult;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jspecify.annotations.NullMarked;
 
-@DefaultQualifier(NonNull.class)
+@NullMarked
 public interface ActionService {
 
     ModifyFlightResult modifyFly(Player player, FlightStatus status);
