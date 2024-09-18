@@ -1,4 +1,5 @@
 import io.papermc.hangarpublishplugin.model.Platforms
+import xyz.jpenilla.resourcefactory.bukkit.Permission
 
 plugins {
     val indraVersion = "3.1.3"
@@ -7,8 +8,7 @@ plugins {
 
     id("com.gradleup.shadow") version "8.3.2"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("xyz.jpenilla.gremlin-gradle") version "0.0.6"
-    id("net.ltgt.errorprone") version "4.0.1"
+    id("xyz.jpenilla.resource-factory-paper-convention") version "1.2.0"
 
     id("io.papermc.hangar-publish-plugin") version "0.1.2"
     id("com.modrinth.minotaur") version "2.8.7"
@@ -30,45 +30,40 @@ repositories {
     sonatype.ossSnapshots()
 }
 
-fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: String) {
-    api(group, name, version)
-    runtimeDownload(group, name, version)
+configurations {
+    create("relocateDeps") {
+        isCanBeResolved = true
+        isCanBeConsumed = false
+
+        extendsFrom(configurations.implementation.get())
+    }
 }
 
 dependencies {
-    errorprone("com.google.errorprone", "error_prone_core", "2.32.0")
-
     compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
     compileOnly("org.jspecify", "jspecify", "1.0.0")
 
-    runtimeDownloadApi("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
-    runtimeDownloadApi("org.incendo", "cloud-minecraft-extras", "2.0.0-SNAPSHOT")
-    runtimeDownloadApi("com.google.inject", "guice", "7.0.0")
-    runtimeDownloadApi("com.google.inject.extensions", "guice-assistedinject", "7.0.0")
+    implementation("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
+    implementation("org.incendo", "cloud-minecraft-extras", "2.0.0-SNAPSHOT")
+    implementation("com.google.inject", "guice", "7.0.0") {
+        exclude("com.google.guava")
+    }
+    implementation("com.google.inject.extensions", "guice-assistedinject", "7.0.0")
 
-    runtimeDownloadApi("org.spongepowered", "configurate-hocon", "4.1.2")
-    runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.1.8")
+    implementation("org.spongepowered", "configurate-hocon", "4.1.2")
+    implementation("com.github.ben-manes.caffeine", "caffeine", "3.1.8")
 
-    runtimeDownloadApi("love.broccolai.corn", "corn-minecraft", "4.0.0-SNAPSHOT")
-    runtimeDownloadApi("love.broccolai.corn", "corn-trove", "4.0.0-SNAPSHOT")
-    runtimeDownloadApi("com.seiama", "event-api", "1.0.0-SNAPSHOT")
+    implementation("love.broccolai.corn", "corn-minecraft", "4.0.0-SNAPSHOT")
+    implementation("love.broccolai.corn", "corn-trove", "4.0.0-SNAPSHOT")
+    implementation("com.seiama", "event-api", "1.0.0-SNAPSHOT")
 
     // database
-    runtimeDownloadApi("com.zaxxer", "HikariCP", "5.1.0")
-    runtimeDownloadApi("org.flywaydb", "flyway-core", "10.18.0")
-    runtimeDownloadApi("com.h2database", "h2", "2.3.232")
-    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.45.4")
+    implementation("com.zaxxer", "HikariCP", "5.1.0")
+    implementation("org.flywaydb", "flyway-core", "10.18.0")
+    implementation("com.h2database", "h2", "2.2.224")
+    implementation("org.jdbi", "jdbi3-core", "3.45.4")
 
-    runtimeDownloadApi("net.kyori.moonshine", "moonshine-standard", "2.0.4")
-}
-
-configurations.runtimeDownload {
-    exclude("io.papermc.paper")
-    exclude("net.kyori", "adventure-api")
-    exclude("net.kyori", "adventure-text-minimessage")
-    exclude("net.kyori", "adventure-text-serializer-plain")
-    exclude("org.slf4j", "slf4j-api")
-    exclude("org.ow2.asm")
+    implementation("net.kyori.moonshine", "moonshine-standard", "2.0.4")
 }
 
 tasks {
@@ -76,16 +71,32 @@ tasks {
         minecraftVersion("1.21")
     }
 
-    processResources {
-        expand("version" to version)
-    }
-
     shadowJar {
         dependencies {
-            include(dependency("xyz.jpenilla:gremlin-runtime:0.0.6"))
-        }
+            fun relocate(dependency: String) {
+                relocate(dependency, "love.broccolai.beanstalk.libs.$dependency")
+            }
 
-        relocate("xyz.jpenilla.gremlin", "love.broccolai.beanstalk.lib.xyz.jpenilla.gremlin")
+            relocate("love.broccolai.corn")
+            relocate("com.github.benmanes.caffeine")
+            relocate("org.incendo.cloud")
+            relocate("org.spongepowered.configurate")
+            relocate("com.typesafe.config")
+            relocate("com.seiama.event")
+            relocate("net.kyori.moonshine")
+            relocate("com.zaxxer.hikari")
+            relocate("io.leangen.geantyref")
+            relocate("org.jdbi")
+            // guice
+            relocate("com.google.inject")
+            relocate("org.aopalliance")
+            relocate("jakarta.inject")
+
+            exclude(dependency("org.slf4j:slf4j-api"))
+            exclude(dependency("org.checkerframework:checker-qual"))
+            exclude(dependency("com.google.errorprone:error_prone_annotations"))
+            exclude { it.moduleGroup == "com.google.guava" }
+        }
 
         archiveFileName.set(project.name + ".jar")
     }
@@ -93,14 +104,24 @@ tasks {
     build {
         dependsOn(shadowJar)
     }
+}
 
-    writeDependencies {
-        repos.set(listOf(
-            "https://repo.papermc.io/repository/maven-public/",
-            "https://repo.broccol.ai/snapshots/",
-            "https://repo.maven.apache.org/maven2/",
-            "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-        ))
+paperPluginYaml {
+    name = "beanstalk"
+    main = "love.broccolai.beanstalk.Beanstalk"
+    apiVersion = "1.21"
+    authors = listOf("broccolai")
+    version = rootProject.version.toString()
+
+    permissions {
+        register("beanstalk.admin") {
+            description = "Admin permissions for beanstalk"
+            default = Permission.Default.OP
+        }
+        register("beanstalk.user") {
+            description = "User permissions for beanstalk"
+            default = Permission.Default.OP
+        }
     }
 }
 
