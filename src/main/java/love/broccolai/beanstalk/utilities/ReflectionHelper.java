@@ -34,7 +34,7 @@ public final class ReflectionHelper {
         Parameter[] reflectedParameters = method.getParameters();
 
         for (int i = 0; i < reflectedParameters.length; i++) {
-           Parameter reflectedParameter = reflectedParameters[i];
+            Parameter reflectedParameter = reflectedParameters[i];
             if (reflectedParameter.isAnnotationPresent(annotationClass)) {
                 results.add((T) objectParameters[i]);
             }
