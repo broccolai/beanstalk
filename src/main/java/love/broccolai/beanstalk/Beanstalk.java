@@ -54,6 +54,8 @@ public final class Beanstalk extends JavaPlugin {
         this.registerListeners();
 
         this.injector.getInstance(FlightCheckTask.class).register();
+
+        BeanstalkApi.instance = this.injector.getInstance(BeanstalkApi.class);
     }
 
     @Override
