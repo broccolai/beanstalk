@@ -1,6 +1,8 @@
 import io.papermc.hangarpublishplugin.model.Platforms
 import xyz.jpenilla.gremlin.gradle.ShadowGremlin
 import xyz.jpenilla.resourcefactory.bukkit.Permission
+import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
+import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml.Load
 
 plugins {
     val indraVersion = "3.1.3"
@@ -40,6 +42,7 @@ fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: S
 dependencies {
     compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
     compileOnly("org.jspecify", "jspecify", "1.0.0")
+    compileOnly("io.github.miniplaceholders", "miniplaceholders-api", "2.2.3")
 
     implementation("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
     implementation("org.incendo", "cloud-minecraft-extras", "2.0.0-SNAPSHOT")
@@ -124,6 +127,10 @@ paperPluginYaml {
     apiVersion = "1.21"
     authors = listOf("broccolai")
     version = rootProject.version.toString()
+
+    dependencies {
+        server("MiniPlaceholders", Load.BEFORE, false)
+    }
 
     permissions {
         register("beanstalk.admin") {

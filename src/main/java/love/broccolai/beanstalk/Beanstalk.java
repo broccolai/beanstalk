@@ -6,6 +6,7 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.commands.command.PluginCommand;
+import love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion;
 import love.broccolai.beanstalk.inject.ConfigurationModule;
 import love.broccolai.beanstalk.inject.FactoryModule;
 import love.broccolai.beanstalk.inject.PluginModule;
@@ -52,6 +53,7 @@ public final class Beanstalk extends JavaPlugin {
 
         this.registerCommands();
         this.registerListeners();
+        this.registerExpansions();
 
         this.injector.getInstance(FlightCheckTask.class).register();
 
@@ -81,6 +83,10 @@ public final class Beanstalk extends JavaPlugin {
                 this
             );
         }
+    }
+
+    private void registerExpansions() {
+        MiniPlaceholdersExpansion.tryRegister(this.injector);
     }
 
 }

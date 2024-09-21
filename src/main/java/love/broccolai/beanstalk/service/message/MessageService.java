@@ -5,6 +5,7 @@ import love.broccolai.beanstalk.model.profile.FlightStatus;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.message.annotations.Receiver;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import net.kyori.moonshine.annotation.Message;
 import net.kyori.moonshine.annotation.Placeholder;
 import org.bukkit.entity.Player;
@@ -56,5 +57,11 @@ public interface MessageService {
 
     @Message("warning.minute-remaining")
     void minuteRemaining(@Receiver Audience receiver);
+
+    @Message("tag.status")
+    Component statusTag(@Placeholder FlightStatus status, @Placeholder Duration duration);
+
+    @Message("tag.remaining")
+    Component remainingTag(@Placeholder Duration duration);
 
 }
