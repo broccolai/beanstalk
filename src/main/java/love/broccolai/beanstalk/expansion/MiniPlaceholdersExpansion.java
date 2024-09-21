@@ -1,7 +1,6 @@
 package love.broccolai.beanstalk.expansion;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import io.github.miniplaceholders.api.Expansion;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.message.MessageService;
@@ -13,33 +12,28 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
+import org.slf4j.Logger;
 
 @NullMarked
-public final class MiniPlaceholdersExpansion {
+public final class MiniPlaceholdersExpansion implements BeanstalkExpansion{
 
+    private final Logger logger;
     private final ProfileService profileService;
     private final MessageService messageService;
 
     @Inject
     public MiniPlaceholdersExpansion(
+        final Logger logger,
         final ProfileService profileService,
         final MessageService messageService
     ) {
+        this.logger = logger;
         this.profileService = profileService;
         this.messageService = messageService;
     }
 
-    public static void tryRegister(final Injector injector) {
-        try {
-            Class.forName("io.github.miniplaceholders.api.MiniPlaceholders");
-        } catch (ClassNotFoundException e) {
-            return;
-        }
-
-        injector.getInstance(MiniPlaceholdersExpansion.class).register();
-    }
-
-    public void register() {
+    @Override
+    public void apply() {
         Expansion expansion = Expansion.builder("beanstalk")
             .filter(Player.class)
             .audiencePlaceholder("status", this::status)
@@ -47,6 +41,7 @@ public final class MiniPlaceholdersExpansion {
             .build();
 
         expansion.register();
+        this.logger.info("Registered MiniPlaceholders expansion");
     }
 
     private Tag status(final Audience audience, final ArgumentQueue queue, final Context context) {

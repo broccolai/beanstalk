@@ -24,6 +24,14 @@ public final class ReflectionHelper {
         }
     }
 
+    public static <T> Class<T> sneakyClassForName(final String clazz) {
+        try {
+            return (Class<T>) Class.forName(clazz);
+        } catch (final ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> Collection<T> parametersAnnotatedBy(
             final Class<? extends Annotation> annotationClass,

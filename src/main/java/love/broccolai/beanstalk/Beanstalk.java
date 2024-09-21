@@ -6,7 +6,9 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.commands.command.PluginCommand;
+import love.broccolai.beanstalk.expansion.BeanstalkExpansion;
 import love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion;
+import love.broccolai.beanstalk.expansion.PlaceholderAPIExpansion;
 import love.broccolai.beanstalk.inject.ConfigurationModule;
 import love.broccolai.beanstalk.inject.FactoryModule;
 import love.broccolai.beanstalk.inject.PluginModule;
@@ -17,6 +19,7 @@ import love.broccolai.beanstalk.listeners.PreventFallListener;
 import love.broccolai.beanstalk.service.profile.provider.ProfileCacheProvider;
 import love.broccolai.beanstalk.tasks.FlightCheckTask;
 import love.broccolai.beanstalk.utilities.ArrayHelper;
+import love.broccolai.beanstalk.utilities.ReflectionHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -24,6 +27,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.incendo.cloud.CommandManager;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.Map;
 
 @NullMarked
 public final class Beanstalk extends JavaPlugin {
@@ -35,6 +40,11 @@ public final class Beanstalk extends JavaPlugin {
         FeatherUseListener.class,
         PreventFallListener.class,
         PlayerLeaveListener.class
+    );
+
+    private static final Map<String, String> EXPANSIONS = Map.of(
+            "me.clip.placeholderapi.expansion.PlaceholderExpansion", "love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion",
+            "io.github.miniplaceholders.api.MiniPlaceholders", "love.broccolai.beanstalk.expansion.PlaceholderAPIExpansion"
     );
 
     private @MonotonicNonNull Injector injector;
@@ -86,7 +96,14 @@ public final class Beanstalk extends JavaPlugin {
     }
 
     private void registerExpansions() {
-        MiniPlaceholdersExpansion.tryRegister(this.injector);
+        EXPANSIONS.forEach((requirement, expansion) -> {
+            if (!ReflectionHelper.classExists(requirement)) {
+                return;
+            }
+
+            Class<? extends BeanstalkExpansion> expansionClass = ReflectionHelper.sneakyClassForName(expansion);
+            this.injector.getInstance(expansionClass).apply();
+        });
     }
 
 }

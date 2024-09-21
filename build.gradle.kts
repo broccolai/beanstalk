@@ -1,7 +1,6 @@
 import io.papermc.hangarpublishplugin.model.Platforms
 import xyz.jpenilla.gremlin.gradle.ShadowGremlin
 import xyz.jpenilla.resourcefactory.bukkit.Permission
-import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
 import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml.Load
 
 plugins {
@@ -30,6 +29,9 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.broccol.ai/snapshots/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
+        content { includeGroup("me.clip") }
+    }
     sonatype.s01Snapshots()
     sonatype.ossSnapshots()
 }
@@ -42,7 +44,10 @@ fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: S
 dependencies {
     compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
     compileOnly("org.jspecify", "jspecify", "1.0.0")
+
+    // expansions
     compileOnly("io.github.miniplaceholders", "miniplaceholders-api", "2.2.3")
+    compileOnly("me.clip", "placeholderapi", "2.11.6")
 
     implementation("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
     implementation("org.incendo", "cloud-minecraft-extras", "2.0.0-SNAPSHOT")
@@ -87,7 +92,12 @@ reloc("xyz.jpenilla.gremlin")
 
 tasks {
     runServer {
-        minecraftVersion("1.21")
+        minecraftVersion("1.20.6")
+
+        downloadPlugins {
+            github("MiniPlaceholders", "MiniPlaceholders", "2.2.4", "MiniPlaceholders-Paper-2.2.4.jar")
+            hangar("PlaceholderAPI", "2.11.6")
+        }
     }
 
     shadowJar {
@@ -130,6 +140,7 @@ paperPluginYaml {
 
     dependencies {
         server("MiniPlaceholders", Load.BEFORE, false)
+        server("PlaceholderAPI", Load.BEFORE, false)
     }
 
     permissions {
