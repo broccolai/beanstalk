@@ -4,11 +4,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+import java.util.Map;
 import love.broccolai.beanstalk.commands.cloud.commander.Commander;
 import love.broccolai.beanstalk.commands.command.PluginCommand;
 import love.broccolai.beanstalk.expansion.BeanstalkExpansion;
-import love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion;
-import love.broccolai.beanstalk.expansion.PlaceholderAPIExpansion;
 import love.broccolai.beanstalk.inject.ConfigurationModule;
 import love.broccolai.beanstalk.inject.FactoryModule;
 import love.broccolai.beanstalk.inject.PluginModule;
@@ -27,8 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.incendo.cloud.CommandManager;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.Map;
 
 @NullMarked
 public final class Beanstalk extends JavaPlugin {

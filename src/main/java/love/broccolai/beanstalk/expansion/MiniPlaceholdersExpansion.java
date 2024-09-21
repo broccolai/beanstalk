@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 
 @NullMarked
-public final class MiniPlaceholdersExpansion implements BeanstalkExpansion{
+public final class MiniPlaceholdersExpansion implements BeanstalkExpansion {
 
     private final Logger logger;
     private final ProfileService profileService;

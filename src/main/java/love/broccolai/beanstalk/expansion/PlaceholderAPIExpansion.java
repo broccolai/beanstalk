@@ -1,6 +1,9 @@
 package love.broccolai.beanstalk.expansion;
 
 import com.google.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
@@ -12,9 +15,6 @@ import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 @NullMarked
 public final class PlaceholderAPIExpansion extends PlaceholderExpansion implements BeanstalkExpansion {
