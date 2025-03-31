@@ -81,6 +81,7 @@ fun reloc(dependency: String) {
 reloc("love.broccolai.corn")
 reloc("org.incendo.cloud")
 reloc("org.spongepowered.configurate")
+reloc("net.kyori.option")
 reloc("com.typesafe.config")
 reloc("com.seiama.event")
 reloc("net.kyori.moonshine")
@@ -89,6 +90,9 @@ reloc("io.leangen.geantyref")
 reloc("org.aopalliance")
 reloc("jakarta.inject")
 reloc("xyz.jpenilla.gremlin")
+reloc("org.antlr")
+reloc("org.jspecify")
+reloc("com.google.inject.assistedinject")
 
 tasks {
     runServer {
