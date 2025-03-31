@@ -40,8 +40,8 @@ public final class Beanstalk extends JavaPlugin {
     );
 
     private static final Map<String, String> EXPANSIONS = Map.of(
-            "PlaceholderAPI", "love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion",
-            "MiniPlaceholders", "love.broccolai.beanstalk.expansion.PlaceholderAPIExpansion"
+            "MiniPlaceholders", "love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion",
+            "PlaceholderAPI", "love.broccolai.beanstalk.expansion.PlaceholderAPIExpansion"
     );
 
     private @MonotonicNonNull Injector injector;
