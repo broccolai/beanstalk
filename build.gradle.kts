@@ -11,12 +11,12 @@ plugins {
     id("com.gradleup.shadow") version "8.3.2"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("xyz.jpenilla.resource-factory-paper-convention") version "1.2.0"
-    id("xyz.jpenilla.gremlin-gradle") version "0.0.6"
+    id("xyz.jpenilla.gremlin-gradle") version "0.0.7"
 
-    id("io.papermc.hangar-publish-plugin") version "0.1.2"
+    id("io.papermc.hangar-publish-plugin") version "0.1.3"
     id("com.modrinth.minotaur") version "2.8.7"
 
-    id("com.github.ben-manes.versions") version "0.51.0"
+    id("com.github.ben-manes.versions") version "0.52.0"
 }
 
 indra {
@@ -42,11 +42,11 @@ fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: S
 }
 
 dependencies {
-    compileOnly("io.papermc.paper", "paper-api", "1.21-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper", "paper-api", "1.21.4-R0.1-SNAPSHOT")
     compileOnly("org.jspecify", "jspecify", "1.0.0")
 
     // expansions
-    compileOnly("io.github.miniplaceholders", "miniplaceholders-api", "2.2.3")
+    compileOnly("io.github.miniplaceholders", "miniplaceholders-api", "2.3.0")
     compileOnly("me.clip", "placeholderapi", "2.11.6")
 
     implementation("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
@@ -54,18 +54,18 @@ dependencies {
     runtimeDownloadApi("com.google.inject", "guice", "7.0.0")
     implementation("com.google.inject.extensions", "guice-assistedinject", "7.0.0")
 
-    implementation("org.spongepowered", "configurate-hocon", "4.1.2")
-    runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.1.8")
+    implementation("org.spongepowered", "configurate-hocon", "4.2.0")
+    runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.2.0")
 
     implementation("love.broccolai.corn", "corn-minecraft", "4.0.0-SNAPSHOT")
     implementation("love.broccolai.corn", "corn-trove", "4.0.0-SNAPSHOT")
     implementation("com.seiama", "event-api", "1.0.0-SNAPSHOT")
 
     // database
-    implementation("com.zaxxer", "HikariCP", "5.1.0")
-    runtimeDownloadApi("org.flywaydb", "flyway-core", "10.18.0")
-    runtimeDownloadApi("com.h2database", "h2", "2.2.224")
-    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.45.4")
+    implementation("com.zaxxer", "HikariCP", "6.3.0")
+    runtimeDownloadApi("org.flywaydb", "flyway-core", "11.5.0")
+    runtimeDownloadApi("com.h2database", "h2", "2.3.232")
+    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.49.0")
 
     implementation("net.kyori.moonshine", "moonshine-standard", "2.0.4")
 }
@@ -92,10 +92,10 @@ reloc("xyz.jpenilla.gremlin")
 
 tasks {
     runServer {
-        minecraftVersion("1.20.6")
+        minecraftVersion("1.21.4")
 
         downloadPlugins {
-            github("MiniPlaceholders", "MiniPlaceholders", "2.2.4", "MiniPlaceholders-Paper-2.2.4.jar")
+            github("MiniPlaceholders", "MiniPlaceholders", "2.3.0", "MiniPlaceholders-Paper-2.3.0.jar")
             hangar("PlaceholderAPI", "2.11.6")
         }
     }
@@ -133,8 +133,9 @@ tasks {
 paperPluginYaml {
     name = "beanstalk"
     main = "love.broccolai.beanstalk.Beanstalk"
+    bootstrapper = "love.broccolai.beanstalk.BeanstalkBootstrap"
     loader = "love.broccolai.beanstalk.libs.xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader"
-    apiVersion = "1.21"
+    apiVersion = "1.21.4"
     authors = listOf("broccolai")
     version = rootProject.version.toString()
 
@@ -156,7 +157,7 @@ paperPluginYaml {
 }
 
 val releaseNotes = providers.environmentVariable("RELEASE_NOTES")
-val versions = listOf("1.21")
+val versions = listOf("1.21.4")
 val shadowJar = tasks.shadowJar.flatMap { it.archiveFile }
 
 hangarPublish.publications.register("plugin") {
