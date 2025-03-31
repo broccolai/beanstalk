@@ -40,8 +40,8 @@ public final class Beanstalk extends JavaPlugin {
     );
 
     private static final Map<String, String> EXPANSIONS = Map.of(
-            "me.clip.placeholderapi.expansion.PlaceholderExpansion", "love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion",
-            "io.github.miniplaceholders.api.MiniPlaceholders", "love.broccolai.beanstalk.expansion.PlaceholderAPIExpansion"
+            "PlaceholderAPI", "love.broccolai.beanstalk.expansion.MiniPlaceholdersExpansion",
+            "MiniPlaceholders", "love.broccolai.beanstalk.expansion.PlaceholderAPIExpansion"
     );
 
     private @MonotonicNonNull Injector injector;
@@ -94,7 +94,7 @@ public final class Beanstalk extends JavaPlugin {
 
     private void registerExpansions() {
         EXPANSIONS.forEach((requirement, expansion) -> {
-            if (!ReflectionHelper.classExists(requirement)) {
+            if (!Bukkit.getPluginManager().isPluginEnabled(requirement)) {
                 return;
             }
 
