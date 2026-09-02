@@ -5,7 +5,6 @@ import io.github.miniplaceholders.api.Expansion;
 import love.broccolai.beanstalk.model.profile.Profile;
 import love.broccolai.beanstalk.service.message.MessageService;
 import love.broccolai.beanstalk.service.profile.ProfileService;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -35,17 +34,15 @@ public final class MiniPlaceholdersExpansion implements BeanstalkExpansion {
     @Override
     public void apply() {
         Expansion expansion = Expansion.builder("beanstalk")
-            .filter(Player.class)
-            .audiencePlaceholder("status", this::status)
-            .audiencePlaceholder("remaining", this::remaining)
+            .audiencePlaceholder(Player.class, "status", this::status)
+            .audiencePlaceholder(Player.class, "remaining", this::remaining)
             .build();
 
         expansion.register();
         this.logger.info("Registered MiniPlaceholders expansion");
     }
 
-    private Tag status(final Audience audience, final ArgumentQueue queue, final Context context) {
-        Player player = (Player) audience;
+    private Tag status(final Player player, final ArgumentQueue queue, final Context context) {
         Profile profile = this.profileService.get(player.getUniqueId());
 
         Component component = this.messageService.statusTag(
@@ -56,8 +53,7 @@ public final class MiniPlaceholdersExpansion implements BeanstalkExpansion {
         return Tag.selfClosingInserting(component);
     }
 
-    private Tag remaining(final Audience audience, final ArgumentQueue queue, final Context context) {
-        Player player = (Player) audience;
+    private Tag remaining(final Player player, final ArgumentQueue queue, final Context context) {
         Profile profile = this.profileService.get(player.getUniqueId());
 
         Component component = this.messageService.remainingTag(

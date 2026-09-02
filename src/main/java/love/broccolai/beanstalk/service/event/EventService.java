@@ -1,6 +1,6 @@
 package love.broccolai.beanstalk.service.event;
 
-import com.seiama.event.EventSubscriber;
+import com.sasorio.event.EventSubscriber;
 import love.broccolai.beanstalk.event.Event;
 import love.broccolai.beanstalk.service.Service;
 import org.jspecify.annotations.NullMarked;

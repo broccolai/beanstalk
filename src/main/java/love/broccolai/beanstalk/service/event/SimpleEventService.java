@@ -1,12 +1,12 @@
 package love.broccolai.beanstalk.service.event;
 
 import com.google.inject.Singleton;
-import com.seiama.event.EventSubscriber;
-import com.seiama.event.EventSubscription;
-import com.seiama.event.bus.EventBus;
-import com.seiama.event.bus.SimpleEventBus;
-import com.seiama.event.registry.EventRegistry;
-import com.seiama.event.registry.SimpleEventRegistry;
+import com.sasorio.event.EventSubscriber;
+import com.sasorio.event.EventSubscription;
+import com.sasorio.event.bus.EventBus;
+import com.sasorio.event.bus.SimpleEventBus;
+import com.sasorio.event.registry.EventRegistry;
+import com.sasorio.event.registry.SimpleEventRegistry;
 import love.broccolai.beanstalk.event.Event;
 import org.jspecify.annotations.NullMarked;
 

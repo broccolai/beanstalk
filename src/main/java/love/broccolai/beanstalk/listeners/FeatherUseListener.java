@@ -36,7 +36,7 @@ public class FeatherUseListener implements Listener {
     public void onPlayerInteract(final PlayerInteractEvent event) {
         Action action = event.getAction();
 
-        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
+        if (action != Action.RIGHT_CLICK_AIR) {
             return;
         }
 

@@ -4,70 +4,70 @@ import xyz.jpenilla.resourcefactory.bukkit.Permission
 import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml.Load
 
 plugins {
-    val indraVersion = "3.1.3"
+    val indraVersion = "4.0.0"
     id("net.kyori.indra") version indraVersion
     id("net.kyori.indra.checkstyle") version indraVersion
 
-    id("com.gradleup.shadow") version "8.3.2"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("xyz.jpenilla.resource-factory-paper-convention") version "1.2.0"
-    id("xyz.jpenilla.gremlin-gradle") version "0.0.7"
+    id("com.gradleup.shadow") version "9.4.0"
+    id("xyz.jpenilla.run-paper") version "3.1.0"
+    id("xyz.jpenilla.resource-factory-paper-convention") version "1.3.1"
+    id("xyz.jpenilla.gremlin-gradle") version "0.0.9"
 
-    id("io.papermc.hangar-publish-plugin") version "0.1.3"
-    id("com.modrinth.minotaur") version "2.8.7"
+    id("io.papermc.hangar-publish-plugin") version "0.1.4"
+    id("com.modrinth.minotaur") version "2.8.9"
 
-    id("com.github.ben-manes.versions") version "0.52.0"
+    id("io.github.ben-manes.versions") version "0.61.0"
 }
 
 indra {
     javaVersions {
-        target(21)
+        target(25)
+        minimumToolchain(25)
     }
 }
 
 repositories {
     mavenCentral()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.broccol.ai/snapshots/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
         content { includeGroup("me.clip") }
     }
-    sonatype.s01Snapshots()
-    sonatype.ossSnapshots()
 }
 
-fun DependencyHandler.runtimeDownloadApi(group: String, name: String, version: String) {
-    api(group, name, version)
-    runtimeDownload(group, name, version)
+fun DependencyHandler.runtimeDownloadApi(dependency: String) {
+    api(dependency)
+    runtimeDownload(dependency)
 }
 
 dependencies {
-    compileOnly("io.papermc.paper", "paper-api", "1.21.4-R0.1-SNAPSHOT")
-    compileOnly("org.jspecify", "jspecify", "1.0.0")
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.74-stable")
+    compileOnly("org.jspecify:jspecify:1.0.0")
 
     // expansions
-    compileOnly("io.github.miniplaceholders", "miniplaceholders-api", "2.3.0")
-    compileOnly("me.clip", "placeholderapi", "2.11.6")
+    compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
+    compileOnly("me.clip:placeholderapi:2.12.3")
 
-    implementation("org.incendo", "cloud-paper", "2.0.0-SNAPSHOT")
-    implementation("org.incendo", "cloud-minecraft-extras", "2.0.0-SNAPSHOT")
-    runtimeDownloadApi("com.google.inject", "guice", "7.0.0")
-    implementation("com.google.inject.extensions", "guice-assistedinject", "7.0.0")
+    implementation("org.incendo:cloud-paper:2.1.0-SNAPSHOT")
+    implementation("org.incendo:cloud-minecraft-extras:2.1.0-SNAPSHOT")
+    runtimeDownloadApi("com.google.inject:guice:7.0.0")
+    implementation("com.google.inject.extensions:guice-assistedinject:7.0.0")
 
-    implementation("org.spongepowered", "configurate-hocon", "4.2.0")
-    runtimeDownloadApi("com.github.ben-manes.caffeine", "caffeine", "3.2.0")
+    implementation("org.spongepowered:configurate-hocon:4.2.0")
+    runtimeDownloadApi("com.github.ben-manes.caffeine:caffeine:3.2.0")
 
-    implementation("love.broccolai.corn", "corn-minecraft", "4.0.0-SNAPSHOT")
-    implementation("love.broccolai.corn", "corn-trove", "4.0.0-SNAPSHOT")
-    implementation("com.seiama", "event-api", "1.0.0-SNAPSHOT")
+    implementation("love.broccolai.corn:corn-minecraft:4.1.0-SNAPSHOT")
+    implementation("love.broccolai.corn:corn-trove:4.1.0-SNAPSHOT")
+    implementation("com.sasorio:event-api:1.0.0")
 
     // database
-    implementation("com.zaxxer", "HikariCP", "6.3.0")
-    runtimeDownloadApi("org.flywaydb", "flyway-core", "11.5.0")
-    runtimeDownloadApi("com.h2database", "h2", "2.3.232")
-    runtimeDownloadApi("org.jdbi", "jdbi3-core", "3.49.0")
+    implementation("com.zaxxer:HikariCP:6.3.0")
+    runtimeDownloadApi("org.flywaydb:flyway-core:13.2.0")
+    runtimeDownloadApi("com.h2database:h2:2.3.232")
+    runtimeDownloadApi("org.jdbi:jdbi3-core:3.49.0")
 
-    implementation("net.kyori.moonshine", "moonshine-standard", "2.0.4")
+    implementation("net.kyori.moonshine:moonshine-standard:2.0.4")
 }
 
 fun reloc(dependency: String) {
@@ -83,7 +83,7 @@ reloc("org.incendo.cloud")
 reloc("org.spongepowered.configurate")
 reloc("net.kyori.option")
 reloc("com.typesafe.config")
-reloc("com.seiama.event")
+reloc("com.sasorio.event")
 reloc("net.kyori.moonshine")
 reloc("com.zaxxer.hikari")
 reloc("io.leangen.geantyref")
@@ -96,11 +96,11 @@ reloc("com.google.inject.assistedinject")
 
 tasks {
     runServer {
-        minecraftVersion("1.21.4")
+        minecraftVersion("26.1.2")
 
         downloadPlugins {
-            github("MiniPlaceholders", "MiniPlaceholders", "2.3.0", "MiniPlaceholders-Paper-2.3.0.jar")
-            hangar("PlaceholderAPI", "2.11.6")
+            github("MiniPlaceholders", "MiniPlaceholders", "3.2.0", "MiniPlaceholders-Paper-3.2.0.jar")
+            hangar("PlaceholderAPI", "2.12.3")
         }
     }
 
@@ -119,6 +119,7 @@ tasks {
             exclude { it.moduleGroup.contains("com.fasterxml.jackson") }
             exclude { it.moduleGroup == "com.google.guava" }
         }
+
 
         archiveFileName.set(project.name + ".jar")
     }
@@ -139,7 +140,7 @@ paperPluginYaml {
     main = "love.broccolai.beanstalk.Beanstalk"
     bootstrapper = "love.broccolai.beanstalk.BeanstalkBootstrap"
     loader = "love.broccolai.beanstalk.libs.xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader"
-    apiVersion = "1.21.4"
+    apiVersion = "26.1.2"
     authors = listOf("broccolai")
     version = rootProject.version.toString()
 
@@ -161,7 +162,7 @@ paperPluginYaml {
 }
 
 val releaseNotes = providers.environmentVariable("RELEASE_NOTES")
-val versions = listOf("1.21.4")
+val versions = listOf("26.1.2")
 val shadowJar = tasks.shadowJar.flatMap { it.archiveFile }
 
 hangarPublish.publications.register("plugin") {
